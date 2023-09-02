@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/** Hamburger MENU */
+.hamburger {
+    @apply transition-all relative w-[24px] h-[24px] cursor-pointer duration-200;
+    /*transition: all 0.25s;*/
+}
+
+.hamburger-top,
+.hamburger-middle,
+.hamburger-bottom {
+    content: '';
+    @apply w-[25px] h-[3px] top-0 left-0 bg-black absolute;
+}
+
+.hamburger-middle {
+    @apply translate-y-[7px];
+}
+
+.hamburger-bottom {
+    @apply translate-y-[14px];
+}
+
+.open {
+    @apply rotate-90 translate-y-0 fixed top-[40px] right-[25px];
+}
+
+.open .hamburger-top {
+    @apply rotate-45 translate-y-[6px] translate-x-[6px] bg-white;
+}
+
+.open .hamburger-bottom {
+    @apply -rotate-45 translate-y-[6px] translate-x-[6px] bg-white;
+}
+
+.open .hamburger-middle {
+    @apply hidden;
+}
+
+.active__nav {
+    @apply border-b-4 border-b-yellowColor text-yellowColor transition ease-linear duration-300;
+}
+
+@layer utilities {
+    .container__limiter {
+        @apply md:max-w-[900px] lg:max-w-[1200px] xl:max-w-[90%] sm:max-w-[80%];
+    }
+}
+
+.slider {
+    @apply w-full max-w-full h-screen relative overflow-hidden;
+}
+
+.slide {
+    @apply w-full max-w-full h-screen absolute transition ease-linear duration-300;
+}
+
+.btn {
+    @apply absolute w-16 h-16 bg-yellowColor text-[30px] p-2 z-10;
+}
+
