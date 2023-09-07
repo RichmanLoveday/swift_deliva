@@ -2,7 +2,6 @@
 
 use app\core\Controller;
 use app\models\Auth;
-
 class Dispatch extends Controller
 {
 

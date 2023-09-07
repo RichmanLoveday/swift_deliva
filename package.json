@@ -4,19 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tailwindcss -i ./input.css -o ./css/style.css",
-    "watch": "tailwindcss -i ./input.css -o ./css/style.css --watch"
+    "build": "tailwindcss -i input.css -o css/style.css",
+    "watch": "tailwindcss -i input.css -o css/style.css --watch"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "tailwind-scrollbar": "^3.0.4",
-    "tailwindcss": "^3.3.2"
-  },
-  "dependencies": {
-    "@tailwindcss/forms": "^0.5.3",
-    "sweetalert2": "^11.7.12",
-    "tw-elements": "^1.0.0-beta2"
+    "tailwindcss": "^3.3.3"
   }
 }
