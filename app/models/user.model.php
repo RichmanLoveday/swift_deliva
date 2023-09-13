@@ -77,7 +77,7 @@ class User extends Models
                 $businessData['companyName'] = ucfirst($POST->businessDetails->companyName);
                 $businessData['owner'] = $userData['userID'];
                 $businessData['state'] = $POST->businessDetails->companyState;
-                $businessData['lga'] = $POST->businessDetails->companyLga;
+              //  $businessData['lga'] = $POST->businessDetails->companyLga;
                 $businessData['date'] = $userData['date'];
                 $businessData['companyID'] = get_random_string(60);
 
@@ -125,7 +125,7 @@ class User extends Models
         // connection
         $db = Database::newInstance();
 
-        $query = "INSERT INTO company (companyID, companyName, owner, state, lga, date) values (:companyID, :companyName, :owner, :state, :lga, :date)";
+        $query = "INSERT INTO company (companyID, companyName, owner, state, date) values (:companyID, :companyName, :owner, :state, :date)";
         $db->write($query, $data);
 
         return ($query) ? true : false;

@@ -25,7 +25,7 @@
                  <form class="flex flex-col  space-y-3 justify-center items-center px-6 py-4 w-full">
                      <div class="flex justify-between space-x-3 items-center">
                          <div class="space-y-2 w-1/2">
-                             <label for="fullName" class=" text-sm font-semibold">Full Name*</label>
+                             <label for="fullName" class="text-sm font-semibold">Full Name*</label>
                              <input type="text"
                                  class="w-full p-1 border-2 border-gray-900/10 rounded-lg placeholder:p-1 full_name"
                                  placeholder="Enter full name" name="fullName">
