@@ -56,8 +56,8 @@ class Order extends Controller
             $data['uri'] = ROOT;
             $data['orders'] = $currOrders;
             $data['type'] = 'currentOrder';
-            echo json_encode($data);
 
+            echo json_encode($data);
             return;
         }
     
@@ -115,7 +115,9 @@ class Order extends Controller
 
     public function sheduled_orders() {
         if (!isObjectEmpty($this->fetch)) {
-            $sheduledOrders = $this->orderM->get_orders_by_company_id($this->fetch->companyID); 
+            $sheduledOrders = $this->orderM->get_orders_by_company_id($this->fetch->companyID);
+            
+        //  show($sheduledOrders);
 
             // loop through and check for current delivery day index and order is not unassigned
             $currentDate = strtotime(date('Y-m-d'));
@@ -147,6 +149,7 @@ class Order extends Controller
                 $data['uri'] = ROOT;
                 $data['type'] = 'sheduledOrder';
 
+              //  show($data); die;
                 echo json_encode($data);
             }
 
@@ -170,7 +173,6 @@ class Order extends Controller
 
                         $order->pickUpDate = $newDate[0];
                         $order->deliveryDate = $newDate[1];
-                        
                         
                         $this->statusChecker($order);
 
@@ -196,33 +198,33 @@ class Order extends Controller
         // die;
         $incomplete = $this->orderM->get_incomplete_orders_by_company_id($this->fetch->companyID);
 
-        if(is_array($incomplete)) {
-            
-            $currentDate = strtotime(date('Y-m-d'));
-            $newArr = array_filter($incomplete, function ($order) use ($currentDate) {
-                $deliveryDate = strtotime($order->deliveryDate);
-                $pickupDate = strtotime($order->pickUpDate);
-                if (($currentDate > $deliveryDate && $currentDate > $pickupDate) || $pickupDate < $currentDate) {
-                    // format date
-                    $newDate = $this->formatDate($order->pickUpDate, $order->deliveryDate);
+            if(is_array($incomplete)) {
+                
+                $currentDate = strtotime(date('Y-m-d'));
+                $newArr = array_filter($incomplete, function ($order) use ($currentDate) {
+                    $deliveryDate = strtotime($order->deliveryDate);
+                    $pickupDate = strtotime($order->pickUpDate);
+                    if ($currentDate < $deliveryDate && $currentDate > $pickupDate) {
+                        // format date
+                        $newDate = $this->formatDate($order->pickUpDate, $order->deliveryDate);
 
-                    $order->pickUpDate = $newDate[0];
-                    $order->deliveryDate = $newDate[1];
-                    
-                    $this->statusChecker($order);
+                        $order->pickUpDate = $newDate[0];
+                        $order->deliveryDate = $newDate[1];
+                        
+                        $this->statusChecker($order);
 
-                    return $order;
-                }
-            });
+                        return $order;
+                    }
+                });
 
-            $data['orders'] = array_values($newArr);
-            $data['status'] = 'success';
-            $data['images'] = IMAGES;
-            $data['uri'] = ROOT;
-            $data['type'] = 'incompletedOrder';
+                $data['orders'] = array_values($newArr);
+                $data['status'] = 'success';
+                $data['images'] = IMAGES;
+                $data['uri'] = ROOT;
+                $data['type'] = 'incompletedOrder';
 
-            echo json_encode($data);
-        }
+                echo json_encode($data);
+            }
            
         }
     }
@@ -232,6 +234,8 @@ class Order extends Controller
      //   show($this->fetch); die;
         if (!isObjectEmpty($this->fetch)) {
             $order = $this->packagesM->get_package_orders($this->fetch->packageID);
+            $order->orderDate = $this->orderM->get_orders_by_id($order->orderID)->date;
+
             if ($order) {
                 if(!is_null($order->driverID)) {
                     $order->driverName = $this->driverM->get_get_drivers($order->driverID)->fullName;
@@ -246,7 +250,6 @@ class Order extends Controller
                 $data['images'] = IMAGES;
                 $data['uri'] = ROOT;
 
-             //   show($data); die;
                 echo json_encode($data);
             }
         }
@@ -258,9 +261,10 @@ class Order extends Controller
 
             if (is_array($hsitory)) {
                 $currentDate = strtotime(date('Y-m-d'));
-                $newArr = array_filter($hsitory, function ($order) use ($currentDate) {
+                foreach($hsitory as $key => $order) {
+                    // echo $order->deliveryDate;
                     $deliveryDate = strtotime($order->deliveryDate);
-                    if ($deliveryDate < $currentDate) {
+                    if ($currentDate > $deliveryDate) {
                         // format date
                         $newDate = $this->formatDate($order->pickUpDate, $order->deliveryDate);
                         
@@ -268,16 +272,17 @@ class Order extends Controller
                         $order->deliveryDate = $newDate[1];
                         
                         $this->statusChecker($order);
+                    } else {
+                        unset($hsitory[$key]);
                     }
-                    return $order;
-                    
-                });
+                }
               
-                $data['orders'] = array_values($newArr);
+                $data['orders'] = array_values($hsitory);
                 $data['status'] = 'success';
                 $data['images'] = IMAGES;
                 $data['uri'] = ROOT;
                 $data['type'] = 'incompletedOrder';
+
                 
                 echo json_encode($data);
             }
@@ -286,7 +291,7 @@ class Order extends Controller
 
     public function reshedule() {
         if (!isObjectEmpty($this->fetch)) {
-          //  show($this->fetch); die;
+          // show($this->fetch); 
             $reshedule = $this->orderM->reshedule_order($this->fetch);
             $order = $this->orderM->get_orders_by_id($this->fetch->orderID);
             
@@ -296,23 +301,40 @@ class Order extends Controller
             if($reshedule && $order) {
                 $currentDate = strtotime(date('Y-m-d'));
                 $pcikUpdate = strtotime($order->pickUpDate);
-
-                if($this->fetch->type == 'currentDay') {
-                    if (($currentDate === $pcikUpdate)) {
+                $deliveryDate = strtotime($order->deliveryDate);
+                $date = $this->formatDate($order->pickUpDate, $order->deliveryDate);
+                // for current day orders
+                if($this->fetch->tab == 'currentDay') {
+                    if ($currentDate === $pcikUpdate && $currentDate > $deliveryDate) {
                         $data['remove'] = false;
-                        $data['date'] = $this->formatDate($order->pickUpDate, $order->deliveryDate)[0];
+                        
                     } else {
                         $data['remove'] = true;
+                        $data['pickupdate'] = $date[0];
+                        $data['deliverydate'] = $date[1];
                     }
                 }
 
 
-                if ($this->fetch->type == 'incompleteOrders') {
-                    if (($currentDate === $pcikUpdate || $pcikUpdate > $currentDate)) {
+                // for incomplete orders
+                if ($this->fetch->tab === 'incompleteOrders') {
+                    if ($currentDate > $pcikUpdate) {
                         $data['remove'] = true;
                     } else {
                         $data['remove'] = false;
-                        $data['date'] = $this->formatDate($order->pickUpDate, $order->deliveryDate)[0];
+                        $data['pickupdate'] = $date[0];
+                        $data['deliverydate'] = $date[1];
+                    }
+                }
+
+                // for history past
+                if($this->fetch->tab === 'orderHistory') {
+                    if($currentDate > $deliveryDate) {
+                        $data['remove'] = true;
+                    } else {
+                        $data['remove'] = false;
+                        $data['pickupdate'] = $date[0];
+                        $data['deliverydate'] = $date[1];
                     }
                 }
                
@@ -322,6 +344,8 @@ class Order extends Controller
                 $data['uri'] = ROOT;
                 $data['message'] = 'Order resheduled successfully';
 
+             //   show($data); die;
+
             } else {
                 $data['status'] = 'failed';
                 $data['images'] = IMAGES;
@@ -329,6 +353,8 @@ class Order extends Controller
                 $data['message'] = 'Unable to reshedule order';
                 
             }
+
+          //  show($data); die;
 
             echo json_encode($data);
         }
@@ -400,55 +426,56 @@ class Order extends Controller
     }
     
     private function statusChecker($order) {
-    // fix statuses
-    $order->orderStatus = '';
-    $order->statusCol = '';
+        // fix statuses
+        $order->orderStatus = '';
+        $order->statusCol = '';
 
-    if ($order->order_status == WAITING) {
-        $order->orderStatus = 'waiting';
-        $order->statusCol = 'warning';
-    }
+        if ($order->order_status == WAITING) {
+            $order->orderStatus = 'waiting';
+            $order->statusCol = 'warning';
+        }
 
-    if ($order->order_status == UNASSIGNED) {
-        $order->orderStatus = 'Not assigned';
-        $order->statusCol = 'info';
-    }
+        if ($order->order_status == UNASSIGNED) {
+            $order->orderStatus = 'Not assigned';
+            $order->statusCol = 'info';
+        }
 
-    if ($order->order_status == PICKED_UP) {
-        $order->orderStatus = 'Picked Up';
-        $order->statusCol = 'info';
-    }
+        if ($order->order_status == PICKED_UP) {
+            $order->orderStatus = 'Picked Up';
+            $order->statusCol = 'info';
+        }
 
-    if ($order->order_status == ONWAY) {
-        $order->orderStatus = 'On the way';
-        $order->statusCol = 'info';
-    }
+        if ($order->order_status == ONWAY) {
+            $order->orderStatus = 'On the way';
+            $order->statusCol = 'info';
+        }
 
-    if ($order->order_status == STARTING) {
-        $order->orderStatus = 'Starting';
-        $order->statusCol = 'info';
-    }
+        if ($order->order_status == STARTING) {
+            $order->orderStatus = 'Starting';
+            $order->statusCol = 'info';
+        }
 
-    if ($order->order_status == ORDER_DELIVERED) {
-        $order->orderStatus = 'Delivered';
-        $order->statusCol = 'success';
-    }
+        if ($order->order_status == ORDER_DELIVERED) {
+            $order->orderStatus = 'Delivered';
+            $order->statusCol = 'success';
+        }
 
-    if ($order->order_status == ORDER_CANCELLED) {
-        $order->orderStatus = 'Cancelled';
-        $order->statusCol = 'danger';
-    }
+        if ($order->order_status == ORDER_CANCELLED) {
+            $order->orderStatus = 'Cancelled';
+            $order->statusCol = 'danger';
+        }
 
-    if ($order->order_status == FAILED_ORDER) {
-        $order->orderStatus = 'Failed';
-        $order->statusCol = 'danger';
-    }
+        if ($order->order_status == FAILED_ORDER) {
+            $order->orderStatus = 'Failed';
+            $order->statusCol = 'danger';
+        }
 
     }
 
     private function formatDate($pickupDate, $deliveryDate) {
         // format date 
         $pickupDateArr = explode('-', $pickupDate);
+     //   show($pickupDateArr);
         $newPickUpDate = date("F j", mktime(0, 0, 0, $pickupDateArr[1], $pickupDateArr[0]));
 
         // delivery date

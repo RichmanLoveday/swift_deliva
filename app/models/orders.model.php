@@ -36,6 +36,24 @@ class Orders extends Models {
         return false;
     }
 
+    public function edit_orders($data, $orderID) {
+       // $timeStamp = (int) strtotime($data->deliveryTime);
+        $timeStamp = (int) strtotime(str_replace('/', '-', $data->deliveryDate . ' ' . $data->deliveryTime));
+        
+        $order['companyID'] = $data->deliveryServiceProvider;
+        $order['pickupDate'] = date('d-m-Y', (int) strtotime(str_replace('/', '-', $data->pickUpdate)));
+        $order['deliveryDate'] = date('d-m-Y h:i:s',$timeStamp);
+        $order['orderID'] = $orderID;
+
+      //  show($order); die;
+        $query = "UPDATE orders SET companyID = :companyID, pickUpDate = :pickupDate, deliveryDate = :deliveryDate WHERE orderID = :orderID";
+        $result = $this->Database->write($query, $order);
+
+        if ($result) return true;
+
+        return false;
+    }
+
     public function get_orders_by_id($id) {
         $query = "SELECT * FROM orders WHERE orderID = :id limit 1";
         $result = $this->Database->read($query, ['id' => $id]);
@@ -55,7 +73,6 @@ class Orders extends Models {
             // update only driver id
             $query = "UPDATE orders SET driverID = :driverID , order_status = :status WHERE orderID = :orderID";
             $result = $this->Database->write($query, ['driverID' => $data->driverID, 'orderID' => $data->orderID, 'status' => $status]);
-        
         }
 
         return $result ? true : false;
@@ -97,9 +114,9 @@ class Orders extends Models {
 
     public function get_history_orders_by_company_id($companyID)
     {
-        $query = "SELECT * FROM packages JOIN orders ON packages.packageID = orders.packageID JOIN users ON packages.senderID = users.userID JOIN receiver ON receiver.receiverID = packages.receiverID WHERE orders.companyID = :id AND orders.order_status = :canceled OR orders.order_status = :failed OR orders.order_status = :delivered order by orders.id desc";
+        $query = "SELECT * FROM packages JOIN orders ON packages.packageID = orders.packageID JOIN users ON packages.senderID = users.userID JOIN receiver ON receiver.receiverID = packages.receiverID WHERE orders.companyID = :id AND orders.order_status = :canceled OR orders.order_status = :failed OR orders.order_status = :delivered OR orders.order_status = :not_assigned order by orders.id desc";
         
-        $result = $this->Database->read($query, ['id' => $companyID, 'canceled' => ORDER_CANCELLED, 'failed' => FAILED_ORDER, 'delivered' => ORDER_DELIVERED]);
+        $result = $this->Database->read($query, ['id' => $companyID, 'canceled' => ORDER_CANCELLED, 'failed' => FAILED_ORDER, 'delivered' => ORDER_DELIVERED, 'not_assigned' => UNASSIGNED]);
 
         return is_array($result) ? $result : [];
     }
@@ -107,9 +124,15 @@ class Orders extends Models {
 
     public function reshedule_order($data) {
         //  show($data); die;
-        $pickUpDate = date('d-m-Y', (int) strtotime(str_replace('/', '-', $data->pickUpDate)));
-        $query = "UPDATE orders SET pickUpDate = :pickupdate WHERE orderID = :id";
-        $result = $this->Database->write($query, ['id' => $data->orderID, 'pickupdate'=> $pickUpDate]);
+        // $pickUpDate = date('d-m-Y', (int) strtotime(str_replace('/', '-', $data->pickUpDate)));
+        $order['pickUpDate'] = date('d-m-Y', (int) strtotime(str_replace('/', '-', $data->pickUpDate)));
+        $order['deliveryDate'] = date('d-m-Y h:i:s', (int) strtotime(str_replace('/', '-', $data->deliveryDate . ' ' . $data->deliveryTime))); ;
+        $order['orderID'] = $data->orderID;
+
+      //show($order); die;
+
+        $query = "UPDATE orders SET pickUpDate = :pickUpDate, deliveryDate = :deliveryDate WHERE orderID = :orderID";
+        $result = $this->Database->write($query, $order);
         
         return $result ?? false;
     }

@@ -131,7 +131,7 @@
                                         if ($order->driverName == 'N/A' && $order->orderStatus == 'Not assigned') :
                                             $reshedule =
                                                 '<li>
-                                        <a class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-neutral-600 reshedule_order"
+                                        <a class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 reshedule_order"
                                             data-url="' . $root . 'order/reshedule" data-id="' . $orderID . '" href="#"
                                             data-te-dropdown-item-ref href="#" data-te-toggle="modal"
                                             data-te-target="#resedule" data-te-ripple-init
@@ -147,7 +147,7 @@
                                         if ($order->driverName == 'N/A') :
                                             $assignDriver =
                                                 '<li>
-                                            <a class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-neutral-600 assign_driver"
+                                            <a class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 assign_driver"
                                                 data-url="' . $root . 'order/assign_driver" data-id="' . $orderID . '" href="#" data-te-toggle="modal"
                                                 data-te-target="#assignDriver" data-te-ripple-init
                                                 data-te-ripple-color="light">Assign Package
@@ -163,7 +163,7 @@
                                         if ($order->driverName != 'N/A') :
                                             $reAssignDriver =
                                                 '<li>
-                                            <a class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-neutral-600 re_assign_driver"
+                                            <a class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 re_assign_driver"
                                                 data-url="' . $root . 'order/reassign_driver" data-id="' . $orderID . '" href="#" data-te-toggle="modal"
                                                 data-te-target="#assignDriver" data-te-ripple-init
                                                 data-te-ripple-color="light">RE-Assign Package
@@ -182,21 +182,21 @@
                                         </div>
                                     </td>
 
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                                         <?= $order->fullName ?></td>
 
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                                         <?= $order->address ?></td>
 
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                                         <?= $order->pickUpDate ?></td>
 
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                                         <?= $order->receiverAddress ?></td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                                         <?= $order->deliveryDate ?></td>
 
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                                         <span
                                             class="inline-block whitespace-nowrap rounded-[0.27rem] bg-<?= $order->statusCol ?>-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-<?= $order->statusCol ?>-700">
                                             <?= $order->orderStatus ?>
@@ -209,10 +209,10 @@
                                                 data-te-ripple-color="light">
                                                 <img src="<?= IMAGES ?>dropdown.png" alt="">
                                             </button>
-                                            <ul class="absolute z-[1000] float-left m-0 hidden min-w-max list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-left text-base shadow-lg dark:bg-neutral-700 [&[data-te-dropdown-show]]:block"
+                                            <ul class="absolute z-[1000] float-left m-0 hidden min-w-max list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-left text-base shadow-lg [&[data-te-dropdown-show]]:block"
                                                 aria-labelledby="dropdownMenuButton1" data-te-dropdown-menu-ref>
                                                 <li>
-                                                    <a class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-neutral-600 view_details"
+                                                    <a class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 view_details"
                                                         data-url="<?= ROOT ?>order/order_details"
                                                         data-orderNum="<?= $num ?>"
                                                         data-packageID="<?= $order->packageID ?>" href="#"

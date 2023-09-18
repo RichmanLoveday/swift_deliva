@@ -42,24 +42,27 @@ class Drivers extends Controller
     public function register()
     {
         if (!isObjectEmpty($this->fetch)) {
+           // show($this->fetch);
 
             // add state and lga to current driver
             $this->fetch->userDetails->state = $_SESSION['USER']->state;
             $this->fetch->userDetails->lga = $_SESSION['USER']->lga;
 
-            $new_user = $this->driverM->sign_up_driver($this->fetch);
-            $companyDrive = $this->driverM->get_all_drivers_by_company_id($this->fetch->userDetails->companyID)[0] ?? null;
+            $new_driver = $this->driverM->sign_up_driver($this->fetch);
+            $lastInsertedDriver = $this->driverM->get_all_drivers_by_company_id($this->fetch->userDetails->companyID)[0] ?? null;
 
-            if ($new_user) {
+            if ($new_driver) {
                 $data['status'] = 'success';
                 $data['message'] = $this->driverM->success_message;
-                $data['last_updated'] = $companyDrive;
+                $data['last_updated'] = $lastInsertedDriver;
                 $data['uri'] = ROOT;
                 $data['images'] = IMAGES;
 
+
+                //show($data); die;
                 // send data to ajax
                 echo json_encode($data);
-            } elseif (count($this->driverM->errors) > 0) {
+            } elseif (count($this->driverM->errors) > 0 && !$new_driver) {
                 $data['errors'] = $this->driverM->errors;
                 $data['status'] = 'error';
                 $data['uri'] = ROOT;
@@ -93,7 +96,6 @@ class Drivers extends Controller
                 $data['area'] = $driver->state . ', ' . $driver->lga;
                 $data['phone'] = $driver->phone;
                 $data['uri'] = ROOT;
-
 
                 echo json_encode($data);
             } else {
@@ -156,7 +158,7 @@ class Drivers extends Controller
 
             if ($resetPass) {
                 $data['status'] = 'success';
-                $data['message'] = 'Driver Edited Successfully';
+                $data['message'] = 'Driver password reset successfully';
                 $data['uri'] = ROOT;
 
                 echo json_encode($data);
@@ -191,6 +193,40 @@ class Drivers extends Controller
             } else {
                 $data['status'] = 'error';
                 $data['message'] = 'Unable to delete driver';
+                $data['uri'] = ROOT;
+
+                echo json_encode($data);
+            }
+        }
+    }
+
+    public function disable_driver() {
+        if(!isObjectEmpty($this->fetch)) {
+            $disableDri = $this->driverM->disable_driver($this->fetch->id);
+
+            if($disableDri) {
+                $data['status'] = 'success';
+              //  $data['message'] = 'Driver delete sucessfully';
+                $data['images'] = IMAGES;
+                $data['driverID'] = $this->fetch->id;
+                $data['images'] = IMAGES;
+                $data['uri'] = ROOT;
+
+                echo json_encode($data);
+            }
+        }
+    }
+
+    public function enable_driver() {
+        if(!isObjectEmpty($this->fetch)) {
+            $disableDri = $this->driverM->enable_driver($this->fetch->id);
+
+            if($disableDri) {
+                $data['status'] = 'success';
+              //  $data['message'] = 'Driver delete sucessfully';
+                $data['images'] = IMAGES;
+                $data['driverID'] = $this->fetch->id;
+                $data['images'] = IMAGES;
                 $data['uri'] = ROOT;
 
                 echo json_encode($data);

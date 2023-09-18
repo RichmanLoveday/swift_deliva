@@ -58,7 +58,7 @@ class Login extends Controller
                 if ($row->role == SUPER_ADMIN) {
                     die;
                 }
-
+                
                 // Redirect page
                 $this->redirect('dashboard');
             } else {

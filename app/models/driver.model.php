@@ -61,7 +61,7 @@ class Driver extends Models
         $userDetails = (array) $POST->userDetails;
         $userData['email']      = clean($userDetails['email']);
         $userData['password']   = clean($userDetails['password']);
-        $userData['phone']      = clean($userDetails['phn']);
+        $userData['phone']      = trim($userDetails['phn']);
         $userData['state']      = $userDetails['state'];
         $userData['lga']        = $userDetails['lga'];
         //$userData['type']       = clean($POST['type']);
@@ -109,14 +109,14 @@ class Driver extends Models
         // Save to userDatabase
         // show($this->errors);
         if (empty($this->errors)) {
-            $userData['fullName'] = clean($userDetails['fullName']);
+            $userData['fullName'] = clean(ucfirst($userDetails['fullName']));
             $userData['password'] = hash('sha1', $userData['password']);
             $userData['status'] = OFFLINE;
             $userData['date'] = date("Y-m-d H:i:s");
 
             if ($POST->type == 'driver') {
                 $userData['role'] = $POST->type;
-                // show($userData);
+              //  show($userData); die;
 
                 $query = "INSERT INTO users (userID, fullName, email, state, lga, phone, password, role, status, date) values (:userID, :fullName, :email, :state, :lga, :phone, :password, :role, :status, :date)";
                 $result = $this->DB->write($query, $userData);
@@ -142,7 +142,7 @@ class Driver extends Models
         $db = Database::newInstance();
 
         $userData['email']      = clean($POST->email);
-        $userData['phone']      = clean($POST->phone);
+        $userData['phone']      = trim($POST->phone);
 
         $sql = "SELECT * FROM users WHERE userID = :userID limit 1";
         $check = $db->read($sql, ['userID' => $POST->id]);
@@ -228,9 +228,26 @@ class Driver extends Models
     }
 
     public function delete_driver($id) {
-        
+        $data['userID'] = $id;
+        $query = "DELETE FROM users WHERE userID = :userID";
+        $result = $this->DB->write($query, $data);
+
+        return $result ? true : false;
+    }
+
+    public function disable_driver($id) {
         $data['userID'] = $id;
         $data['status'] = DRIVE_DISABLED;
+
+        $query = "UPDATE users SET status = :status WHERE userID = :userID";
+        $result = $this->DB->write($query, $data);
+
+        return $result ? true : false;
+    }
+
+    public function enable_driver($id) {
+        $data['userID'] = $id;
+        $data['status'] = OFFLINE;
 
         $query = "UPDATE users SET status = :status WHERE userID = :userID";
         $result = $this->DB->write($query, $data);

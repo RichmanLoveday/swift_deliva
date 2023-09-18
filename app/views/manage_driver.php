@@ -54,34 +54,50 @@
                                 <?php
                                         $statusCol = '';
                                         $status = '';
+                                        $display = '';
+                                        $showDisable = '';
+                                        $showEnable = '';
+                                        
                                         if ($driver->status ==  0) {
                                             $statusCol = 'warning';
                                             $status = 'offline';
+                                            $display = 'block';
+                                            $showDisable = 'block';
+                                            $showEnable = 'hidden';                
                                         }
 
                                         if ($driver->status == 1) {
                                             $statusCol = 'success';
                                             $status = 'on-duty';
+                                            $display = 'block';
+                                            $showDisable = 'block';
+                                            $showEnable = 'hidden'; 
                                         }
-                                        ?>
+
+                                        if($driver->status == 3) {
+                                            $statusCol = 'danger';
+                                            $status = 'disabled';
+                                            $display = 'hidden';
+                                            $showDisable = 'hidden';
+                                            $showEnable = 'block';
+                                        }
+
+                                        
+                                ?>
                                 <tr class="row_datas">
                                     <td
-                                        class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200 row_fullname">
+                                        class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800  row_fullname">
                                         <?= $driver->fullName ?></td>
-                                    <td
-                                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200 row_phone">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800  row_phone">
                                         <?= $driver->phone ?? 'N/A' ?></td>
-                                    <td
-                                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200 row_email">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800  row_email">
                                         <?= $driver->email ?>
                                     </td>
-                                    <td
-                                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200 row_status">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800  row_status">
                                         <span
                                             class="inline-block whitespace-nowrap rounded-[0.27rem] bg-<?= $statusCol ?>-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-<?= $statusCol ?>-700">
                                             <?= $status ?>
                                         </span>
-
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <div class="relative" data-te-dropdown-ref>
@@ -105,7 +121,7 @@
                                                 </li>
                                                 <li>
                                                     <a class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 edit_driver"
-                                                        href="#" data-te-dropdown-item-ref data-te-toggle="modal"
+                                                        disa href="#" data-te-dropdown-item-ref data-te-toggle="modal"
                                                         data-id="<?= $driver->driverName ?>"
                                                         data-url="<?= ROOT ?>drivers/view_details"
                                                         data-te-target="#registerDriver" data-te-ripple-init
@@ -122,6 +138,30 @@
                                                         data-te-ripple-color="light"><img src="<?= IMAGES ?>padlock.png"
                                                             class="inline-block h-5 w-5 -mt-1 mr-1" alt="">
                                                         Reset Password
+                                                    </a>
+                                                </li>
+                                                <li class="<?=$showEnable?>">
+                                                    <a onclick="enable_driver(this)" class="block w-full whitespace-nowrap bg-transparent
+                                                    px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100
+                                                    active:text-neutral-800 active:no-underline
+                                                    disabled:pointer-events-none disabled:bg-transparent
+                                                    disabled:text-neutral-400" href="#" data-te-dropdown-item-ref
+                                                        data-id="<?= $driver->driverName ?>"
+                                                        data-url="<?= ROOT ?>drivers/enable_driver"><img
+                                                            src="<?= IMAGES ?>permit.png"
+                                                            class="inline-block h-5 w-5 -mt-1 mr-1" alt="">
+                                                        Enable
+                                                    </a>
+                                                </li>
+                                                <li class="<?=$showDisable?>">
+                                                    <a onclick="disable_driver(this)"
+                                                        class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400"
+                                                        href="#" data-te-dropdown-item-ref
+                                                        data-id="<?= $driver->driverName ?>"
+                                                        data-url="<?= ROOT ?>drivers/disable_driver"><i
+                                                            class="fa fa-ban text-yellowColor mr-2"
+                                                            aria-hidden="true"></i>
+                                                        Disable
                                                     </a>
                                                 </li>
                                                 <li>

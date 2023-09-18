@@ -34,8 +34,9 @@ class Packages extends Controller
         $data['page_title'] = 'Create Package';
 
         $user = Auth::logged_in();
-        if(!$user) 
-        $this->redirect('login');
+        if(!$user) $this->redirect('login');        // check if login
+
+        //  show($user); die;
 
         // redirect if not admin or customer
         if (!Auth::access('admin') && !Auth::access('customer')) 
@@ -95,20 +96,29 @@ class Packages extends Controller
 
         // check if rank is customer
         if($user->role == 'customer') {
-            $data['senderName'] = $user->fullName;
-            $data['senderMail'] = $user->email;
-            $data['senderPhone'] = $user->phone;
-            $data['senderAddress'] = $user->address ?? '';
+           
+           
             $data['senderInfo'] = true;
         } else {
             $data['senderInfo'] = false;
         }
 
-        $data['uri'] = ROOT;
-        // get active delivery companies bases on location
-        $data['companies'] = $this->companyM->get_delivery_company_by_location($user->state, $user->lga);
+        $data['senderName'] = $user->fullName;
+        $data['senderMail'] = $user->email;
+        $data['senderPhone'] = $user->phone;
+        $data['senderAddress'] = $user->address ?? '';
 
-//show($data); die;
+        //show($data); die;
+
+        if($user->role == 'customer') {
+            // get active delivery companies bases on location
+            $data['companies'] = $this->companyM->get_delivery_company_by_location($user->state, $user->lga);   
+        } else {
+            $data['companies'] = $this->companyM->get_company_by_owner($user->userID);
+        }
+        
+
+        $data['uri'] = ROOT;
 
         // send package details and order details to screen
         $this->view("create_package", $data);
@@ -122,8 +132,9 @@ class Packages extends Controller
         $this->redirect('login');
 
         // Validate input in future time
-      //  show($this->fetch); die;
+      // show($this->fetch); die;
 
+        if(!isObjectEmpty($this->fetch)) {
         $this->fetch->senderID = $user->userID;
         $save_receiver = $this->packagesM->store_receiver($this->fetch);
         $package_store = $this->packagesM->store_package($this->fetch, $save_receiver->receiverID);
@@ -146,7 +157,6 @@ class Packages extends Controller
         }
 
         // return json data of order of package and all
-
         $last_updated = [];
         $packageOrder = $this->packagesM->get_all_package_order();
         $last_index = count($packageOrder) - 1;
@@ -159,6 +169,8 @@ class Packages extends Controller
         $data['uri'] = ROOT;
         $data['images'] = IMAGES;
         $data['last_updated'] = $last_updated;
+    }
+      //  show($data); die;
 
         echo json_encode($data);
        
@@ -208,6 +220,47 @@ class Packages extends Controller
             echo json_encode($data);
         }
         
+    }
+
+    public function retrive_package() {
+        $user = Auth::logged_in();
+        if (!$user) $this->redirect('login');
+        
+        $packages = $this->packagesM->get_package_id($this->fetch->packageID);
+        if(is_object($packages)) {
+            $data['packages'] = $packages;
+            $data['sender'] = $this->userM->get_user($user->userID);
+            $data['images'] = IMAGES;
+            $data['uri'] = ROOT;
+            $data['status'] = 'success';
+            
+            echo json_encode($data);
+        } else {
+            $data['status'] = 'failed';
+            $data['message'] = 'unable to get data';
+
+            echo json_encode($data);
+        }
+    } 
+    
+    public function editPackage() {
+        if(!isObjectEmpty($this->fetch)) {
+            $edit_package = $this->packagesM->edit_package($this->fetch, $this->fetch->packageID);
+            
+            if($edit_package) {
+                // get the reciver for that package
+                $packageOrder = $this->packagesM->get_package_id($this->fetch->packageID);
+                $this->packagesM->edit_receiver($this->fetch, $packageOrder->receiverID);
+                $this->orderM->edit_orders($this->fetch, $packageOrder->orderID); 
+            }
+            
+            // send request back 
+            $data['message'] = 'Package succesfully edited';
+            $data['status'] = 'success';
+            $data['editedPackage'] = $packageOrder = $this->packagesM->get_package_id($this->fetch->packageID);
+
+            echo json_encode($data);
+        }
     }
 
     public function track_package($trackingID)

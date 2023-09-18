@@ -5,13 +5,12 @@
       <div data-te-modal-dialog-ref
           class="pointer-events-none relative w-auto translate-y-[-50px] opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:max-w-[500px]">
           <div
-              class="min-[576px]:shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none dark:bg-zinc-600">
+              class="min-[576px]:shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none">
               <div
-                  class="min-[576px]:shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] pointer-events-auto flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none dark:bg-neutral-700">
+                  class="min-[576px]:shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] pointer-events-auto flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none">
                   <div
-                      class="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
-                      <h5 class="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200"
-                          id="exampleModalLabel">
+                      class="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4">
+                      <h5 class="text-xl font-medium leading-normal text-neutral-800" id="exampleModalLabel">
                           Resedule Order
                       </h5>
                       <button type="button" id="resedule"
@@ -26,22 +25,52 @@
 
 
                   <div class="relative m-3" data-te-datepicker-init data-te-input-wrapper-init>
-                      <input type="text"
-                          class="selectDate peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                      <input type="text" id="pickupDate"
+                          class="pickupDate peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
                           placeholder="Select a date" data-te-datepicker-toggle-ref
                           data-te-datepicker-toggle-button-ref />
                       <label for="floatingInput"
-                          class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">Select
-                          a date
+                          class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none">Select
+                          pickup date
                       </label>
                   </div>
                   <span
-                      class="errorReshedule text-xs font-semibold italic text-[#ff0000] ml-4 -mt-3 opacity-0 transition ease-linear">
-                      Choose a date *
+                      class="errorPickupDate text-xs font-semibold italic text-[#ff0000] ml-4 -mt-3 opacity-0 transition ease-linear">
+                      Choose a pickup date *
+                  </span>
+
+                  <div class="relative m-3" data-te-datepicker-init data-te-input-wrapper-init>
+                      <input type="text" id="deliveryDate"
+                          class="deliverDate peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                          placeholder="Select a date" data-te-datepicker-toggle-ref
+                          data-te-datepicker-toggle-button-ref />
+                      <label for="floatingInput"
+                          class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none">Select
+                          delivery date
+                      </label>
+                  </div>
+                  <span
+                      class="errorDelievryDate text-xs font-semibold italic text-[#ff0000] ml-4 -mt-3 opacity-0 transition ease-linear">
+                      Choose a delivery date *
+                  </span>
+
+                  <div class="relative m-3" data-te-timepicker-init data-te-input-wrapper-init
+                      id="timepicker-just-input">
+                      <input type="text" id="deliveryTime"
+                          class="deliveryTime peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                          placeholder="Select Time" data-te-toggle="timepicker-just-input" id="form15" />
+                      <label for="floatingInput"
+                          class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none">Select
+                          delivery time
+                      </label>
+                  </div>
+                  <span
+                      class="errorDelievryTime text-xs font-semibold italic text-[#ff0000] ml-4 -mt-3 opacity-0 transition ease-linear">
+                      Choose a delivery time *
                   </span>
 
                   <div
-                      class="flex flex-shrink-0 flex-wrap items-center justify-end border-t-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
+                      class="flex flex-shrink-0 flex-wrap items-center justify-end border-t-2 border-neutral-100 border-opacity-100 p-4">
                       <button type="button"
                           class="inline-block rounded bg-yellow-500 text-white px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-primary-accent-100 focus:bg-primary-accent-100 focus:outline-none focus:ring-0 active:bg-primary-accent-200"
                           data-te-modal-dismiss data-te-ripple-init data-te-ripple-color="light">

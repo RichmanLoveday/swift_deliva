@@ -57,9 +57,9 @@ function validateForm(e) {
         passwordInput.nextElementSibling.textContent = '';
     }
 
-    if (! error) {
+    if (!error) {
         async function test() {
-            e.target.setAttribute('disabled', '');
+            // e.target.setAttribute('disabled', '');
             const res = await axios.post(url, {
                 userDetails: {
                     fullName: fullNameInput.value,
@@ -69,7 +69,7 @@ function validateForm(e) {
                     companyID: companyID
                 },
                 type: 'driver'
-            }, {"Content-Type": "multipart/form-data"});
+            }, { "Content-Type": "multipart/form-data" });
 
             console.log(res.data);
             if (res.status == 200 && res.data.status == 'success') {
@@ -82,34 +82,21 @@ function validateForm(e) {
                 let status;
                 let statusCol;
 
-                if (res.data.last_updated.status == 0) {
-                    statusCol = 'warning';
-                    status = 'offline';
-                }
-
-                if (res.data.last_updated.status == 1) {
-                    statusCol = 'success';
-                    status = 'on-duty';
-                }
-
                 let driversDetails = `
                     <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">${
-                    last_updated.fullName
-                }</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                            ${
-                    last_updated.phone ?? 'N/A'
-                }</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                            ${
-                    last_updated.email
-                }
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 ">${last_updated.fullName
+                    }</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">
+                            ${last_updated.phone ?? 'N/A'
+                    }</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">
+                            ${last_updated.email
+                    }
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">
                       <span
-                            class="inline-block whitespace-nowrap rounded-[0.27rem] bg-${statusCol}-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-${statusCol}-700">
-                            ${status}
+                            class="inline-block whitespace-nowrap rounded-[0.27rem] bg-warning-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-warning-700">
+                            offline
                         </span>
 
                         </td>
@@ -134,9 +121,8 @@ function validateForm(e) {
                                     <li>
                                         <a class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 edit_driver"
                                         href="#" data-te-dropdown-item-ref data-te-toggle="modal"
-                                        data-id="${
-                    last_updated.driverName
-                }"
+                                        data-id="${last_updated.driverName
+                    }"
                                         data-url="${uri}drivers/view_details"
                                         data-te-target="#registerDriver" data-te-ripple-init
                                         data-te-ripple-color="light"><img src="${images}edit.png"
@@ -145,9 +131,8 @@ function validateForm(e) {
                                     <li>
                                          <a href="#" class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 reset_password"
                                             data-te-dropdown-item-ref data-te-toggle="modal"
-                                            data-id="${
-                    last_updated.driverName
-                }"
+                                            data-id="${last_updated.driverName
+                    }"
                                             data-url="${uri}drivers/reset_password"
                                             data-te-target="#resetPassword" data-te-ripple-init
                                             data-te-ripple-color="light"><img src="${images}padlock.png"
@@ -156,11 +141,23 @@ function validateForm(e) {
                                         </a>
                                     </li>
                                     <li>
+                                        <a onclick="disable_driver(this)" class="block w-full whitespace-nowrap bg-transparent
+                                        px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100
+                                        active:text-neutral-800 active:no-underline
+                                        disabled:pointer-events-none disabled:bg-transparent
+                                        disabled:text-neutral-400" href="#"
+                                            data-te-dropdown-item-ref data-id="${last_updated.driverName}"
+                                            data-url="${uri}drivers/disable_driver"><img
+                                                src="${images}permit.png"
+                                                class="inline-block h-5 w-5 -mt-1 mr-1" alt="">
+                                            Disable
+                                        </a>
+                                    </li>
+                                    <li>
                                         <a class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 delete_driver"
                                         href="#" data-te-dropdown-item-ref
-                                        data-id="${
-                    last_updated.driverName
-                }"
+                                        data-id="${last_updated.driverName
+                    }"
                                         data-url="${uri}drivers/delete_driver"><i
                                             class="fa fa-trash text-yellowColor mr-2"
                                             aria-hidden="true"></i>
@@ -174,7 +171,7 @@ function validateForm(e) {
                 `;
 
 
-                // check if if children[0] has a carrier empty
+                // check if children[0] has a carrier empty
                 if (document.getElementById('drivers').children[0].classList.contains('empty_carrier')) {
                     document.getElementById('drivers').children[0].remove();
                 }
@@ -209,7 +206,7 @@ function view_details(e) {
     async function test() {
         const res = await axios.post(url, {
             id: id
-        }, {"Content-Type": "multipart/form-data"});
+        }, { "Content-Type": "multipart/form-data" });
         console.log(res.data);
 
         if (res.data.status == 'success') {
@@ -245,7 +242,7 @@ function populate_form(e) {
     async function test() {
         const res = await axios.post(url, {
             id: id
-        }, {"Content-Type": "multipart/form-data"});
+        }, { "Content-Type": "multipart/form-data" });
         console.log(res.data);
 
         if (res.data.status == 'success') {
@@ -313,7 +310,7 @@ editDriverBtn.addEventListener('click', (e) => {
     }
 
 
-    if (! error) {
+    if (!error) {
         async function test() {
             e.target.setAttribute('disabled', '');
             const res = await axios.post(url, {
@@ -322,8 +319,7 @@ editDriverBtn.addEventListener('click', (e) => {
                 phone: phoneInput.value,
                 fullName: fullNameInput.value
 
-            }, {"Content-Type": "multipart/form-data"});
-            console.log(res.data);
+            }, { "Content-Type": "multipart/form-data" });
 
             if (res.data.status == 'success') {
                 e.target.removeAttribute('disabled');
@@ -379,12 +375,10 @@ resetPassword.addEventListener('click', (e) => {
     }
 
     if (document.querySelector('.newPass').value.trim() === "") {
-
         document.querySelector('.newPass').nextElementSibling.textContent = "Please enter new password.*";
         error = true;
     } else {
         document.querySelector('.newPass').nextElementSibling.textContent = '';
-
     }
 
     if (document.querySelector('.conPass').value.trim() === "") {
@@ -399,7 +393,7 @@ resetPassword.addEventListener('click', (e) => {
     }
 
 
-    if (! error) {
+    if (!error) {
         async function test() {
             e.target.setAttribute('disabled', '');
             const res = await axios.post(url, {
@@ -408,9 +402,9 @@ resetPassword.addEventListener('click', (e) => {
                 newPass: document.querySelector('.newPass').value,
                 conPass: document.querySelector('.conPass').value
 
-            }, {"Content-Type": "multipart/form-data"});
-            console.log(res.data);
+            }, { "Content-Type": "multipart/form-data" });
 
+            console.log(res.data);
             if (res.data.status == 'success') {
                 e.target.removeAttribute('disabled');
                 document.querySelector('.close_btn').click();
@@ -453,7 +447,6 @@ function delete_driver(e) {
     const id = e.target.dataset.id;
     const url = e.target.dataset.url;
     const row = e.target.closest('.row_datas');
-    console.log(id);
     Swal.fire({
         title: 'Are you sure?',
         customClass: 'swal',
@@ -468,17 +461,15 @@ function delete_driver(e) {
             async function test() {
                 const res = await axios.post(url, {
                     id: id
-                }, {"Content-Type": "multipart/form-data"});
-                console.log(res.data);
+                }, { "Content-Type": "multipart/form-data" });
 
                 let empty_carrier = ` 
                 <tr class="empty_carrier">
                     <td colspan="5">
                         <div
                             class="flex flex-col items-center justify-center w-1/2 mx-auto space-y-2 p-5">
-                            <img src="${
-                    res.data.images
-                }carrier.png" alt="">
+                            <img src="${res.data.images
+                    }carrier.png" alt="">
                             <h3
                                 class="font-sans text-2xl text-center leading-normal font-semibold text-gray-900/70">
                                 Nothing to
@@ -514,6 +505,51 @@ function delete_driver(e) {
 
 }
 
+async function disable_driver(e) {
+    const id = e.dataset.id;
+    const url = e.dataset.url;
+    const row = e.closest('.row_datas');
+
+    const res = await axios.post(url, {
+        id: id
+    }, { "Content-Type": "multipart/form-data" });
+    console.log(res.data);
+    if (res.data.status == 'success') {
+        e.parentElement.classList.replace('block', 'hidden');
+        e.parentElement.previousElementSibling.classList.replace('hidden', 'block');
+
+        row.children[3].innerHTML = '';
+        row.children[3].innerHTML = ` 
+            <span
+                class="inline-block whitespace-nowrap rounded-[0.27rem] bg-danger-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-danger-700">
+                disabled
+            </span>
+        `;
+    }
+}
+
+async function enable_driver(e) {
+    const id = e.dataset.id;
+    const url = e.dataset.url;
+    const row = e.closest('.row_datas');
+
+    const res = await axios.post(url, {
+        id: id
+    }, { "Content-Type": "multipart/form-data" });
+    console.log(res.data);
+    if (res.data.status == 'success') {
+        e.parentElement.classList.replace('block', 'hidden');
+        e.parentElement.nextElementSibling.classList.replace('hidden', 'block');
+
+        row.children[3].innerHTML = '';
+        row.children[3].innerHTML = `
+            <span
+                class="inline-block whitespace-nowrap rounded-[0.27rem] bg-warning-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-warning-700">
+                offline
+            </span>
+        `;
+    }
+}
 
 function isValidEmail(email) { // Regular expression for email validation
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

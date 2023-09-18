@@ -87,7 +87,7 @@
                                 <h3>Full name of sender</h3>
                                 <input type="text" name="senderFullName"
                                     class="w-full p-1 border-2 border-gray-900/10 rounded-lg placeholder:p-1"
-                                    placeholder="Enter name" value="<?= set_val($senderName) ?>">
+                                    placeholder="Enter name" value="<?= set_val($senderName) ?>" disabled>
                             </div>
 
                             <div class="space-y-2">
@@ -95,19 +95,19 @@
                                 <input type="text"
                                     class="w-full p-1 border-2 border-gray-900/10 rounded-lg placeholder:p-1"
                                     placeholder="Enter contact address" value="<?= set_val($senderAddress) ?>"
-                                    name="pickupAddress">
+                                    name="pickupAddress" disabled>
                             </div>
                             <div class="space-y-2">
                                 <h3 class="mt-3">Phone contact</h3>
-                                <input type="number" name="phoneContact"
+                                <input type="text" name="phoneContact"
                                     class="w-full p-1 border-2 border-gray-900/10 rounded-lg placeholder:p-1"
-                                    placeholder="Enter phone number" value=" <?= set_val($senderPhone) ?>">
+                                    placeholder="Enter phone number" value=" <?= set_val($senderPhone) ?>" disabled>
                             </div>
                             <div class="space-y-2">
                                 <h3 class="mt-3">Enter Email Address</h3>
                                 <input type="email" name="emailAddress"
                                     class="w-full p-1 border-2 border-gray-900/10 rounded-lg placeholder:p-1"
-                                    placeholder="Enter email address" value="<?= set_val($senderMail) ?>">
+                                    placeholder="Enter email address" value="<?= set_val($senderMail) ?>" disabled>
                             </div>
                             <div class="space-y-2" data-te-datepicker-init data-te-input-wrapper-init>
                                 <h3 class="mt-3">Pickup date</h3>
@@ -161,22 +161,22 @@
                                     placeholder="Select Time" data-te-toggle="timepicker-just-input" id="form15">
                             </div>
 
-                            <div class="space-y-2">
+                            <!-- <div class="space-y-2">
                                 <h3 class="mt-3">Enter Email address</h3>
                                 <input type="email" name="recipientEmailAddress"
                                     class="w-full p-1 border-2 border-gray-900/10 rounded-lg placeholder:p-1"
                                     placeholder="Enter email address">
-                            </div>
+                            </div> -->
                         </div>
                         <div class="w-1/2 space-y-2 px-4 my-10 border-l-2 border-gray-900/10">
                             <h3 class="font-sans text-xl font-semibold leading-normal">Billing Details
                             </h3>
-                            <div class="space-y-2">
+                            <!-- <div class="space-y-2">
                                 <h3>Billing Address</h3>
                                 <input type="text" name="billingAddress"
                                     class="w-full p-1 border-2 border-gray-900/10 rounded-lg placeholder:p-1"
                                     placeholder="Enter billing address">
-                            </div>
+                            </div> -->
                             <div class="flex-auto space-y-2" data-te-modal-body-ref>
                                 <h3 class="mt-3">Select Delivery service provider in your location</h3>
                                 <select class="w-full p-1 border-2 border-red rounded-lg placeholder:p-1"
@@ -187,8 +187,7 @@
                                     <?php endforeach; ?>
 
                                 </select>
-                                <span class="text-red-600 hidden text-sm italic errorCourier">Select a
-                                    courier
+                                <span class="text-red-600 hidden text-sm italic errorCourier">Select a courier
                                     service</span>
                             </div>
                             <div class="space-y-2">
@@ -214,17 +213,24 @@
             </div>
             <!-- Modal footer -->
             <div
-                class="mt-auto flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50 min-[0px]:rounded-none">
+                class="mt-auto flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 border-opacity-100 p-4 min-[0px]:rounded-none">
                 <button type="button"
                     class="inline-block rounded bg-primary-100 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-yellow-400/50 focus:bg-yellow-400/50 focus:outline-none focus:ring-0 border border-yellowColor text-yellowColor hover:ease-in"
                     data-te-modal-dismiss>
                     Close
                 </button>
-                <button type="button" id="myForm" data-url="<?= ROOT ?>packages/registerPackage"
-                    data-images="<?= IMAGES ?>"
+                <button onclick="validatePackageForm(this)" type="button" id="createPackageBtn"
+                    data-url="<?= ROOT ?>packages/registerPackage" data-images="<?= IMAGES ?>"
                     class="ml-1 inline-block rounded bg-yellow-600 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-yellow-700 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
                     data-te-ripple-init data-te-ripple-color="light">
-                    Send request
+                    Create Package
+                </button>
+
+                <button onclick="validatePackageForm(this, 'edit')" type="button" id="editPackageBtn"
+                    data-url="<?= ROOT ?>packages/editPackage" data-images="<?= IMAGES ?>"
+                    class="ml-1 inline-block rounded bg-yellow-600 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-yellow-700 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
+                    data-te-ripple-init data-te-ripple-color="light">
+                    Edit Package
                 </button>
             </div>
         </div>

@@ -12,9 +12,9 @@
                     class="h-8 focus:outline-none  focus:border-gray-500/50 focus:ring-0 border-0 border-y border-r border-r-gray-500/50 border-y-gray-500/50 rounded-r-md bg-gray-500/0"
                     id="search" type="text" placeholder="Search pascel">
             </div>
-            <a href=" #" data-te-toggle="modal" data-te-target="#createPackage" data-te-ripple-init
-                data-te-ripple-color="light"
-                class="border border-yellowColor px-3 py-1 text-center w-full rounded-lg bg-yellowColor text-white transition duration-150 hover:ease-in"><img
+            <a onclick="changeBtn()" href=" #" data-te-toggle="modal" data-te-target="#createPackage"
+                data-te-ripple-init data-te-ripple-color="light"
+                class="border border-yellowColor px-3 py-1 text-center w-full rounded-lg bg-yellowColor text-white transition duration-150 hover:ease-in "><img
                     src="<?= IMAGES ?>Add.png" class="inline-block -mt-1 mr-1" alt=""> Create Pascel</a>
         </div>
     </div>
@@ -69,23 +69,22 @@
                                 <?php if (isset($pacakges)) : ?>
                                 <?php foreach ($pacakges as $package) : ?>
                                 <tr class="parcel_row">
-                                    <td
-                                        class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 ">
                                         <?= $package->packageDescription ?></td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">
                                         <?= $package->receiverName ?></td>
                                     <td class="px-6 py-4 whitespace
-                                    -nowrap text-sm text-gray-800 dark:text-gray-200">
+                                    -nowrap text-sm text-gray-800 ">
                                         <?= $package->receiverContact ?></td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">
                                         <?= $package->pickUpDate ?></td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">
                                         <?= $package->deliveryDate ?></td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">
                                         <?= $package->receiverAddress ?></td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">
                                         <?= $package->paymentMethod ?></td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">
                                         <span
                                             class="inline-block whitespace-nowrap rounded-[0.27rem] bg-<?= $package->statusCol ?>-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-<?= $package->statusCol ?>-700">
                                             <?= $package->packageStatus ?>
@@ -103,23 +102,23 @@
                                                 data-te-dropdown-menu-ref>
                                                 <?php if ($package->packageStatus == 'pending') : ?>
                                                 <li>
-                                                    <a data-url="<?= ROOT ?>edit_package"
+                                                    <a onclick="populate_package_form('<?=ROOT?>packages/retrive_package','<?=$package->packageID?>')"
+                                                        data-url="<?= ROOT ?>edit_package"
                                                         class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 edit_parcel"
                                                         href="#" data-te-dropdown-item-ref data-te-toggle="modal"
                                                         data-te-target="#createPackage" data-te-ripple-init
                                                         data-te-ripple-color="light"><i
                                                             class="fa fa-pencil text-yellowColor mr-2"
-                                                            aria-hidden="true"></i>Edit
-                                                        Package</a>
+                                                            aria-hidden="true"></i>Edit Package
+                                                    </a>
                                                 </li>
                                                 <?php endif; ?>
                                                 <li>
                                                     <a target="_blank" href="<?= ROOT ?>packages/track_package"
                                                         class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400"><img
                                                             src="<?= IMAGES ?>track.png" class="inline-block h-5 w-5"
-                                                            alt="">
-                                                        Track
-                                                        package</a>
+                                                            alt="">Track package
+                                                    </a>
                                                 </li>
                                                 <?php if ($package->packageStatus == 'pending') : ?>
                                                 <li>

@@ -5,15 +5,13 @@
      <div data-te-modal-dialog-ref
          class="pointer-events-none relative flex min-h-[calc(100%-1rem)] w-full translate-y-[-50px] items-center opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:min-h-[calc(100%-3.5rem)] min-[576px]:max-w-[650px] mb-5 mt-5">
          <div
-             class="pointer-events-auto relative w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none dark:bg-neutral-600">
-             <div
-                 class="flex flex-shrink-0 items-center justify-center rounded-t-md p-4 px-8 dark:border-opacity-50 loader">
+             class="pointer-events-auto relative w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none">
+             <div class="flex flex-shrink-0 items-center justify-center rounded-t-md p-4 px-8 loader">
                  <img class="w-6 h-6 mr-2 text-center" src="<?= IMAGES ?>spinner.gif" alt=""> Loading....
              </div>
              <div
-                 class="hidden pointer-events-auto relative w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none dark:bg-neutral-600">
-                 <div
-                     class="flex flex-shrink-0 items-center justify-between rounded-t-md p-4 px-8 dark:border-opacity-50">
+                 class="hidden pointer-events-auto relative w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none">
+                 <div class="flex flex-shrink-0 items-center justify-between rounded-t-md p-4 px-8">
                      <!--Modal title-->
                      <div>
                          <h5 class="text-2xl font-sans font-bold leading-normal text-neutral-800"

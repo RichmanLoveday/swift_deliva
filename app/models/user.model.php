@@ -131,8 +131,15 @@ class User extends Models
         return ($query) ? true : false;
     }
 
-    public function get_users()
+    public function get_user($id) 
     {
+        // connection
+        $db = Database::newInstance();
+        
+        $sql = "SELECT * FROM users WHERE userID = :id";
+        $row = $db->read($sql, ['id' => $id]);   
+
+        return is_array($row) ? $row[0] : false;
     }
 
     public function login($POST)

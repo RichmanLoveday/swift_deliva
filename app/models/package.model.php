@@ -32,6 +32,15 @@ class Package extends Models
 
     }
 
+    public function get_package_id($packageID) {
+        $query = "SELECT * FROM packages JOIN receiver as rec ON packages.receiverID = rec.receiverID  JOIN orders ON packages.packageID = orders.packageID WHERE packages.packageID = :packageID";
+
+        $result = $this->Database->read($query, ['packageID' => $packageID]);
+
+        return is_array($result) ? $result[0] : false;
+
+    }
+
     public function store_package($data, $receiverID) {
         // store receiver datas
     
@@ -105,7 +114,21 @@ class Package extends Models
         return false;
     }
 
-    public function edit_package() {}
+    public function edit_package($data, $packageID) {
+        //  show($data); die;
+        $package['packageDescription'] = $data->packageDecription;
+        $package['packageItems'] = json_encode($data->items);
+        $package['deliveryInstruction'] = $data->deliveryInstruction;
+        $package['packageID'] = $packageID;
+
+        // show($package); die;
+        $query = "UPDATE packages SET packageDescription = :packageDescription, packageItems = :packageItems, deliveryInstruction = :deliveryInstruction WHERE packageID = :packageID";
+        $result = $this->Database->write($query, $package);
+
+        if ($result) return true;       
+    
+        return false;
+    }
 
     public function cancel_package($packageID, $status) {
         $query = "UPDATE packages SET deliveryStatus = :status WHERE packageID = :id";
@@ -130,6 +153,21 @@ class Package extends Models
         $result = $this->Database->write($query, $receiver);
 
         if($result) return $this->read_receiver($id);
+
+        return false;
+    }
+
+    public function edit_receiver($data, $receiverID) {
+        //show($data); die;
+        $receiver['fullName'] = $data->receiverName;
+        $receiver['address'] = $data->receiverAddrs;
+        $receiver['contact'] = $data->receiverNumber;
+        $receiver['receiverID'] = $receiverID;
+
+        $query = "UPDATE receiver SET receiverName = :fullName, receiverAddress = :address, receiverContact = :contact WHERE receiverID = :receiverID";
+        $result = $this->Database->write($query, $receiver);
+
+        if($result) return true;
 
         return false;
     }
