@@ -124,7 +124,8 @@ class Order extends Controller
             if(is_array($sheduledOrders)) {
                 $newArr = array_filter($sheduledOrders, function ($order) use ($currentDate) {
                     $pickupDate = strtotime($order->pickUpDate);
-                    if ($pickupDate > $currentDate) {
+                    $status = [UNASSIGNED];
+                    if ($pickupDate > $currentDate && in_array($order->order_status, $status)) {
                         // format date
                         $newDate = $this->formatDate($order->pickUpDate, $order->deliveryDate);
 
@@ -204,7 +205,8 @@ class Order extends Controller
                 $newArr = array_filter($incomplete, function ($order) use ($currentDate) {
                     $deliveryDate = strtotime($order->deliveryDate);
                     $pickupDate = strtotime($order->pickUpDate);
-                    if ($currentDate < $deliveryDate && $currentDate > $pickupDate) {
+                    //$status = [UNASSIGNED, ORDER_CANCELLED, FAILED_ORDER];
+                    if ($currentDate < $deliveryDate && $currentDate >= $pickupDate) {
                         // format date
                         $newDate = $this->formatDate($order->pickUpDate, $order->deliveryDate);
 
@@ -418,6 +420,98 @@ class Order extends Controller
             } else {
                 $data['status'] = 'failed';
                 $data['message'] = 'Driver driver unable to be reassigned';
+                $data['uri'] = ROOT;
+
+                echo json_encode($data);
+            }
+        }
+    }
+
+    public function mark_as_delivered() {
+  //  show($this->fetch); 
+
+        if(!isObjectEmpty($this->fetch)) {
+            // change statusto delivered
+            $orderDelivered = $this->orderM->delivered($this->fetch->orderID, ORDER_DELIVERED);
+            $packageDelivered = $this->packagesM->delivered_package($this->fetch->packageID, DELIEVRED_PACAKGES);
+
+            if($orderDelivered && $packageDelivered) {
+                $order = $this->orderM->get_orders_by_id($this->fetch->orderID);
+                // $updatePackage = $this->packagesM->cancel_package($order->packageID, );
+                $this->statusChecker($order);
+                
+                $data['order'] = $order;
+                $data['status'] = 'success';
+                $data['message'] = 'Package delivered Successfully';
+                $data['uri'] = ROOT;
+
+                echo json_encode($data);
+    
+            }  else {
+                $data['status'] = 'failed';
+                $data['message'] = 'Unable to update status';
+                $data['uri'] = ROOT;
+
+                echo json_encode($data);
+            }
+
+        }
+    }
+
+    public function mark_as_failed() {
+      //  show($this->fetch); die;
+
+        if(!isObjectEmpty($this->fetch)) {
+            // change statusto delivered
+            $orderFailed = $this->orderM->failed_order($this->fetch->orderID, FAILED_ORDER);
+            $packageFailed = $this->packagesM->failed_package($this->fetch->packageID, PACKAGE_FAILED);
+
+            if($orderFailed && $packageFailed){
+                $order = $this->orderM->get_orders_by_id($this->fetch->orderID);
+                // $updatePackage = $this->packagesM->cancel_package($order->packageID, );
+                $this->statusChecker($order);
+                
+                $data['order'] = $order;
+                $data['status'] = 'success';
+                $data['message'] = 'Package is failed';
+                $data['uri'] = ROOT;
+
+                echo json_encode($data);
+    
+            }  else {
+                $data['status'] = 'failed';
+                $data['message'] = 'Unable to update status';
+                $data['uri'] = ROOT;
+
+                echo json_encode($data);
+            }
+
+        }
+    }
+
+    public function delete_order() {
+       // show($this->fetch); die;
+
+        if(!isObjectEmpty($this->fetch)) {
+            // change statusto delivered
+            $orderDisabled = $this->orderM->delete_order($this->fetch->orderID, ORDER_DISABLED);
+           // $packageFailed = $this->packagesM->failed_package($this->fetch->packageID, PACKAGE_FAILED);
+
+            if($orderDisabled){
+               // $order = $this->orderM->get_orders_by_id($this->fetch->orderID);
+                // $updatePackage = $this->packagesM->cancel_package($order->packageID, );
+              //  $this->statusChecker($order);
+                
+              //  $data['order'] = $order;
+                $data['status'] = 'success';
+                $data['message'] = 'Package deleted Successfully';
+                $data['uri'] = ROOT;
+
+                echo json_encode($data);
+    
+            }  else {
+                $data['status'] = 'failed';
+                $data['message'] = 'Unable to update status';
                 $data['uri'] = ROOT;
 
                 echo json_encode($data);

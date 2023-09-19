@@ -32,19 +32,19 @@
                              </button>
                              <ul class="absolute z-[1000] float-left -ml-6 hidden min-w-max list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-left text-base shadow-lg [&[data-te-dropdown-show]]:block"
                                  aria-labelledby="dropdownMenuButton3" data-te-dropdown-menu-ref>
-                                 <li>
-                                     <a class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400"
+                                 <li class="mark_as_delivered hidden">
+                                     <a class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 delivered_btn"
                                          href="#" data-te-dropdown-item-ref> <img src="<?= IMAGES ?>mark.png"
                                              class="inline-block mr-1 w-4 h-4" alt="" srcset=""> Mark as
                                          delivered</a>
                                  </li>
-                                 <li>
-                                     <a class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400"
+                                 <li class="mark_as_failed hidden">
+                                     <a class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 failed_btn"
                                          href="#" data-te-dropdown-item-ref>
                                          Mark as failed</a>
                                  </li>
-                                 <li>
-                                     <a class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-red-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400"
+                                 <li class="delete_package hidden">
+                                     <a class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-red-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 delete_order_btn"
                                          href="#" data-te-dropdown-item-ref> <img src="<?= IMAGES ?>delete_red.png"
                                              class="inline-block mr-2" alt="" srcset="">
                                          Delete</a>
@@ -52,7 +52,7 @@
                              </ul>
                          </div>
                          <button type="button"
-                             class="box-content border-2 border-gray-900/10 rounded-md hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none"
+                             class="box-content border-2 border-gray-900/10 rounded-md hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none close_btn"
                              data-te-modal-dismiss aria-label="Close">
                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                  stroke="currentColor" class="h-6 w-6">

@@ -213,6 +213,7 @@
                                                 aria-labelledby="dropdownMenuButton1" data-te-dropdown-menu-ref>
                                                 <li>
                                                     <a class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 view_details"
+                                                        data-orderID="<?= $order->orderID ?>"
                                                         data-url="<?= ROOT ?>order/order_details"
                                                         data-orderNum="<?= $num ?>"
                                                         data-packageID="<?= $order->packageID ?>" href="#"

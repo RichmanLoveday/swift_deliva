@@ -82,9 +82,10 @@ class Dispatch extends Controller
 
     public function waiting_orders() {
         if (!Auth::access('driver')) $this->redirect('dashboard');
-        $user = Auth::logged_in();
+        $user = Auth::logged_in(); 
         
         $waiting_orders = $this->driverM->get_waiting_orders($this->fetch->companyID, $this->fetch->userID);
+        
 
         if(is_array($waiting_orders)) {
 
@@ -215,7 +216,7 @@ class Dispatch extends Controller
 
     public function update_status() {
         if(!isObjectEmpty($this->fetch)) {
-           show($this->fetch);die;
+          // show($this->fetch);die;
            if($this->fetch->method == 'update') {
                 if ($this->fetch->type == 'pick up') {
                     // update orders status
@@ -229,7 +230,7 @@ class Dispatch extends Controller
 
                     if ($update_order) {
                         $data['status'] = 'success';
-                        $data['message'] = 'status changed success fully';
+                        $data['message'] = 'status changed successfully';
                         $data['images'] = IMAGES;
                         $data['uri'] = ROOT;
 
@@ -259,7 +260,7 @@ class Dispatch extends Controller
 
                     if ($update_order) {
                         $data['status'] = 'success';
-                        $data['message'] = 'status changed success fully';
+                        $data['message'] = 'status changed successfully';
                         $data['images'] = IMAGES;
                         $data['uri'] = ROOT;
 
@@ -324,7 +325,7 @@ class Dispatch extends Controller
                     
                     if ($update_order && $package && $remove_track) {
                         $data['status'] = 'success';
-                        $data['message'] = 'status changed success fully';
+                        $data['message'] = 'status changed successfully';
                         $data['images'] = IMAGES;
                         $data['uri'] = ROOT;
 
@@ -349,7 +350,7 @@ class Dispatch extends Controller
 
                     if ($update_order && $package && $remove_track) {
                         $data['status'] = 'success';
-                        $data['message'] = 'status changed success fully';
+                        $data['message'] = 'status changed successfully';
                         $data['images'] = IMAGES;
                         $data['uri'] = ROOT;
 

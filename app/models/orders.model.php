@@ -88,6 +88,34 @@ class Orders extends Models {
        return false;
     }
 
+    
+    public function delivered($orderID, $status) {
+        $query = "UPDATE orders SET order_status = :status WHERE orderID = :id";
+        $result =  $this->Database->write($query, ['id' => $orderID, 'status' => $status]);
+ 
+        if($result) return true;
+ 
+        return false;
+    }
+
+    public function failed_order($orderID, $status) {
+        $query = "UPDATE orders SET order_status = :status WHERE orderID = :id";
+        $result =  $this->Database->write($query, ['id' => $orderID, 'status' => $status]);
+ 
+        if($result) return true;
+ 
+        return false;
+    }
+
+    public function delete_order($orderID, $status) {
+        $query = "UPDATE orders SET order_status = :status WHERE orderID = :id";
+        $result =  $this->Database->write($query, ['id' => $orderID, 'status' => $status]);
+ 
+        if($result) return true;
+ 
+        return false;
+    }
+
     public function get_orders_by_company_id($companyID) {
         $query = "SELECT * FROM packages JOIN orders ON packages.packageID = orders.packageID JOIN users ON packages.senderID = users.userID JOIN receiver ON receiver.receiverID = packages.receiverID WHERE orders.companyID = :id AND orders.order_status != :cancel AND orders.order_status != :del order by orders.id desc";
         $result = $this->Database->read($query, ['id' => $companyID, 'cancel' => ORDER_CANCELLED, 'del' => ORDER_DISABLED]);
@@ -143,4 +171,5 @@ class Orders extends Models {
 
         return is_array($result) ? $result : [];
     }
+
 }

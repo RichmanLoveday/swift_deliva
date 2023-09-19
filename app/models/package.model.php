@@ -88,7 +88,7 @@ class Package extends Models
     public function package_tracker_update($packageID, $status)
     {
         $trackingID = generateUniqueIDWithDateTime();
-        $query = "UPDATE packages SET trackingID = :trackingID , deliveryStatus = :status WHERE packageID = :packageID";
+        $query = "UPDATE packages SET trackingID = :trackingID, deliveryStatus = :status WHERE packageID = :packageID";
         $result = $this->Database->write($query, ['trackingID' => $trackingID, 'status' => $status, 'packageID' => $packageID]);
 
         if ($result) {
@@ -139,6 +139,24 @@ class Package extends Models
         return false;
     }
 
+    public function delivered_package($packageID, $status) {
+        $query = "UPDATE packages SET deliveryStatus = :status WHERE packageID = :id";
+        $result =  $this->Database->write($query, ['id' => $packageID, 'status' => $status]);
+        
+ 
+        if($result) return true;
+ 
+        return false;
+    }
+
+    public function failed_package($packageID, $status) {
+        $query = "UPDATE packages SET deliveryStatus = :status WHERE packageID = :id";
+        $result =  $this->Database->write($query, ['id' => $packageID, 'status' => $status]);
+ 
+        if($result) return true;
+ 
+        return false;
+    }
 
     public function store_receiver($data) {
         // store receiver * generate unique id

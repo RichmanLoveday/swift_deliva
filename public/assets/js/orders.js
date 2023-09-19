@@ -151,7 +151,7 @@ order_tab.addEventListener('click', (e) => {
                                 <ul class="absolute z-[1000] float-left m-0 hidden min-w-max list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-left text-base shadow-lg [&[data-te-dropdown-show]]:block"
                                     aria-labelledby="dropdownMenuButton1" data-te-dropdown-menu-ref>
                                     <li>                                    
-                                    <a class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 view_details data-orderNum="${inx + 1}" data-url="${res.data.uri}order/order_details" data-packageID="${ord.packageID}" href="#"
+                                    <a class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 view_details data-orderNum="${inx + 1}" data-url="${res.data.uri}order/order_details" data-orderID="${ord.orderID}" data-packageID="${ord.packageID}" href="#"
                                 data-te-dropdown-item-ref data-te-toggle="modal"
                                 data-te-target="#viewPackage" data-te-ripple-init
                                 data-te-ripple-color="light">View details</a>
@@ -447,12 +447,12 @@ function reshedule_order(e) {
 async function view_details(e) {
     if (!e.target.classList.contains('view_details'))
         return;
-
     const packageID = e.target.dataset.packageid;
     const url = e.target.dataset.url;
     const orderNum = e.target.dataset.ordernum;
+    const row = e.target.closest('.order_row');
     let spinner = document.querySelector('.loader');
-
+    console.log('Yeeeeeeeeeeeeeeeeee');
     let test = document.querySelector('.orderStatus')
 
     try {
@@ -462,16 +462,29 @@ async function view_details(e) {
 
         spinner.classList.replace('hidden', 'flex');
         spinner.nextElementSibling.classList.replace('flex', 'hidden');
-        console.log(res.data)
-
+        // console.log(res.data)
         if (res.data.status == 'success') { // remove spinner
             spinner.classList.replace('flex', 'hidden');
             spinner.nextElementSibling.classList.replace('hidden', 'flex');
+
 
             let order = res.data.orders;
             let pickUpdate = formatDateTime(order.pickUpDate);
             let deliveryDateTime = formatDateTime(order.deliveryDate);
             let placementdate = formatDateTime(order.orderDate);
+
+            // check for status and fix some stuff
+            console.log(res.data)
+            // mark as delivered of failed
+            if (order.order_status == 0 || order.order_status == 1 || order.order_status == 2 || order.order_status == 3) {
+                document.querySelector('.mark_as_delivered').classList.replace('hidden', 'block');
+                document.querySelector('.mark_as_failed').classList.replace('hidden', 'block');
+                document.querySelector('.delete_package').classList.replace('block', 'hidden');
+            } else {
+                document.querySelector('.mark_as_delivered').classList.replace('block', 'hidden');
+                document.querySelector('.mark_as_failed').classList.replace('block', 'hidden');
+                document.querySelector('.delete_package').classList.replace('hidden', 'block');
+            }
 
             document.querySelector('.orderStatus').textContent = order.orderStatus;
             document.querySelector('.pickup_location').textContent = order.address;
@@ -522,6 +535,44 @@ async function view_details(e) {
             // formatDateTime(order.date);
         }
 
+        // check for event status event
+        document.querySelector('.delivered_btn').addEventListener('click', async () => {
+            let url = res.data.uri + 'order/mark_as_delivered';
+            const resData = await axios.post(url, { orderID: e.target.dataset.orderid, packageID: e.target.dataset.packageid });
+
+            console.log(resData.data)
+            if (resData.data.status == 'success') {
+                row.remove();
+                document.querySelector('.orderStatus').textContent = resData.data.order.orderStatus;
+                document.querySelector('.close_btn').click();
+            }
+        });
+
+
+        document.querySelector('.failed_btn').addEventListener('click', async () => {
+            let url = res.data.uri + 'order/mark_as_failed';
+            const resData = await axios.post(url, { orderID: e.target.dataset.orderid, packageID: e.target.dataset.packageid });
+
+            console.log(resData.data)
+            if (resData.data.status == 'success') {
+                row.remove();
+                //  document.querySelector('.orderStatus').textContent = resData.data.order.orderStatus;
+                document.querySelector('.close_btn').click();
+            }
+        })
+
+        document.querySelector('.delete_order_btn').addEventListener('click', async () => {
+            let url = res.data.uri + 'order/delete_order';
+            const resData = await axios.post(url, { orderID: e.target.dataset.orderid, packageID: e.target.dataset.packageid });
+
+            console.log(resData.data)
+            if (resData.data.status == 'success') {
+                row.remove();
+                //  document.querySelector('.orderStatus').textContent = resData.data.order.orderStatus;
+                document.querySelector('.close_btn').click();
+            }
+        })
+
     } catch (error) { }
 
 }
@@ -535,11 +586,14 @@ order.addEventListener('click', (e) => {
 
 });
 
-function delete_order(e) { }
+function delete_order(orderID) {
+    console.log(orderID)
+}
 
-function mark_as_delivered() { }
 
-function mark_as_failed() { }
+function mark_as_failed() {
+    console.log(orderID)
+}
 
 function formatDateTime(value) {
     // Array of month names
