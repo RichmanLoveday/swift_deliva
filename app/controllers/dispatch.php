@@ -261,6 +261,7 @@ class Dispatch extends Controller
                     if ($update_order) {
                         $data['status'] = 'success';
                         $data['message'] = 'status changed successfully';
+                        $data['payment_method'] = $this->driverM->get_orders_by_id($this->fetch->orderID, $this->fetch->userID)->payment_status;
                         $data['images'] = IMAGES;
                         $data['uri'] = ROOT;
 
@@ -276,9 +277,7 @@ class Dispatch extends Controller
                 }
 
                 if ($this->fetch->type == 'done') {
-                    //  show($this->fetch);
-                    //die;
-
+                
                     // update orders status
                     $update_order = $this->driverM->update_order($this->fetch->userID, $this->fetch->orderID, ORDER_DELIVERED);
                     $trackingID = $this->packageM->get_package_by_id($this->fetch->packageID);
@@ -287,17 +286,20 @@ class Dispatch extends Controller
 
                     // store payment by driver
                     if($this->fetch->payment) {
-                        $this->store_payment($this->fetch, $this->fetch->orderID);
+                        $this->fetch->paymentMethod = 'Cash on delivery';
+                        $this->store_payment($this->fetch);
                     }
 
                     //   echo $read_tracker;
                     if (!$read_tracker) {
                         $this->packageM->update_tracking($trackingID->trackingID, $this->fetch->packageID, ITEMDELIVERED);
+                    } else {
+                        $this->packageM->delete_tracking($read_tracker->trackingID, ITEMDELIVERED);
                     }
 
                     if ($update_order && $update_package) {
                         $data['status'] = 'success';
-                        $data['message'] = 'status changed successfully';
+                        $data['message'] = 'Item delivered successfully';
                         $data['images'] = IMAGES;
                         $data['uri'] = ROOT;
 

@@ -4,11 +4,17 @@ const driverTabs = document.getElementById('drivers_tabs');
 const drive_tab = document.querySelectorAll('.tab');
 let doneCon;
 let overallContainer;
-
+let attributes = {
+    'data-te-toggle': 'modal',
+    'data-te-target': '#staticBackdrop',
+    'data-te-ripple-init': '',
+    'data-te-ripple-color': 'light',
+    cashondelivery: '',
+};
+let rootUrl;
 async function change_driver_status(e) {
-    console.log(e);
     if (e.target.classList.contains('driver_order_status')) {
-        console.log(e.target.dataset);
+
         const url = e.target.dataset.url;
         const orderID = e.target.dataset.orderid;
         const userID = e.target.dataset.userid;
@@ -19,16 +25,14 @@ async function change_driver_status(e) {
             let overallContainer = container.parentElement;
 
             // run ajax
-            const res = await axios.post(url, {
+            const res = await axios.post(url + 'dispatch/update_status', {
                 orderID: orderID,
                 userID: userID,
                 packageID: packageID,
                 type: 'pick up',
                 method: 'update'
 
-            }, {"Content-Type": "application/json"})
-
-            console.log(res.data);
+            }, { "Content-Type": "application/json" })
 
             if (res.data.status == 'success') { // perfrom responce
                 e.target.parentElement.parentElement.firstElementChild.classList.remove('bg-yellow-500', 'text-white')
@@ -47,22 +51,27 @@ async function change_driver_status(e) {
         }
 
         if (e.target.dataset.status == "on the way") {
-            console.log('yes')
             const container = e.target.parentElement.parentElement.parentElement;
             let overallContainer = container.parentElement;
 
             // run ajax
-            const res = await axios.post(url, {
+            const res = await axios.post(url + 'dispatch/update_status', {
                 packageID: packageID,
                 orderID: orderID,
                 userID: userID,
                 type: 'on the way',
                 method: 'update'
 
-            }, {"Content-Type": "application/json"})
+            }, { "Content-Type": "application/json" })
 
-            console.log(res.data);
             if (res.data.status == 'success') {
+                rootUrl = res.data.uri;
+                console.log(res.data)
+                if (res.data.payment_method == 0) {
+                    // add atrribute to function
+                    addAttribute(e.target, attributes);
+                }
+
                 e.target.parentElement.parentElement.firstElementChild.classList.remove('bg-blue-400/50', 'text-blue-600/75')
                 e.target.parentElement.parentElement.firstElementChild.classList.add('bg-[#5856CE]/30', 'text-[#5856CE]')
                 e.target.parentElement.parentElement.firstElementChild.textContent = 'On the way';
@@ -78,49 +87,44 @@ async function change_driver_status(e) {
         }
 
         if (e.target.dataset.status == "done") {
-            console.log('yes')
             doneCon = e.target.parentElement.parentElement.parentElement;
             overallContainer = doneCon.parentElement;
             let res;
-            console.log(e.target);
             if (e.target.hasAttribute("cashondelivery")) { // fetch amount and save
-                const getAmount = await axios.post(url, {
+                const getAmount = await axios.post(url + 'dispatch/product_amount', {
                     packageID: packageID
-                }, {"Content-Type": "application/json"})
+                }, { "Content-Type": "application/json" })
 
                 if (getAmount.data.status == 'success') { // update driver get money modal
-                    console.log(getAmount.data);
 
                     let attributes = {
                         packageID: getAmount.data.package.packageID,
                         orderID: orderID,
-                        userID: userID
+                        userID: userID,
+                        amount: getAmount.data.package.amount,
                     }
                     let driverPay = document.querySelector('.driverPay');
                     document.querySelector('.requiredAmount').textContent = getAmount.data.package.amount;
                     // set attributes
                     Object.keys(attributes).forEach(elem => {
-                        console.log(attributes.elem)
                         driverPay.setAttribute(elem, attributes[elem]);
                     })
                 }
             } else { // run ajax
-                const res = await axios.post(url, {
+                const res = await axios.post(url + 'dispatch/update_status', {
                     packageID: packageID,
                     orderID: orderID,
                     userID: userID,
                     type: 'done',
                     method: 'update'
 
-                }, {"Content-Type": "application/json"})
-                console.log(res.data);
+                }, { "Content-Type": "application/json" })
 
                 if (res.data.status == 'success') {
                     let emptyOrder = `
                 <div>
-                    <img class="mt-16 mx-auto" src="${
-                        res.data.images
-                    }truck_parcel.png" alt="">
+                    <img class="mt-16 mx-auto" src="${res.data.images
+                        }truck_parcel.png" alt="">
                     <h3 class=" mb-20 font-sans">No dispatch found</h3>
                 </div>
             `;
@@ -140,9 +144,7 @@ async function change_driver_status(e) {
 
     // handle return status
     if (e.target.classList.contains('status_btn')) {
-        console.log(e.target)
         const update_btn = e.target.nextElementSibling;
-        console.log(update_btn);
 
         const url = update_btn.dataset.url;
         const orderID = update_btn.dataset.orderid;
@@ -150,16 +152,18 @@ async function change_driver_status(e) {
         const packageID = update_btn.dataset.packageid;
 
 
-        if (update_btn.dataset.status == "on the way") { // run ajax
-            const res = await axios.post(url, {
+        if (update_btn.dataset.status == "on the way") {
+            // run ajax
+            const res = await axios.post(url + 'dispatch/update_status', {
                 orderID: orderID,
                 userID: userID,
                 packageID: packageID,
                 type: 'pick up',
                 method: 'roll_back'
-            }, {"Content-Type": "application/json"})
+            }, { "Content-Type": "application/json" })
 
-            console.log(res.data);
+            // remove atrributes
+            removeAttribute(e.target.nextElementSibling, attributes);
 
             if (res.data.status == 'success') {
                 e.target.parentElement.parentElement.firstElementChild.classList.remove('bg-blue-400/50', 'text-blue-600/75')
@@ -180,15 +184,16 @@ async function change_driver_status(e) {
         }
 
         if (update_btn.dataset.status == "done") {
-            const res = await axios.post(url, {
+            const res = await axios.post(url + 'dispatch/update_status', {
                 orderID: orderID,
                 userID: userID,
                 packageID: packageID,
                 type: 'on the way',
                 method: 'roll_back'
-            }, {"Content-Type": "application/json"})
+            }, { "Content-Type": "application/json" })
 
-            console.log(res.data);
+            // remove atrributes
+            removeAttribute(e.target.nextElementSibling, attributes);
             if (res.data.status == 'success') {
                 e.target.parentElement.parentElement.firstElementChild.classList.remove('bg-[#5856CE]/30', 'text-[#5856CE]')
                 e.target.parentElement.parentElement.firstElementChild.classList.add('bg-blue-400/50', 'text-blue-600/75')
@@ -196,7 +201,6 @@ async function change_driver_status(e) {
 
                 update_btn.classList.add('bg-[#6ce052]');
                 update_btn.classList.remove('bg-[#66BD50]');
-
 
                 update_btn.childNodes[2].textContent = 'Mark as picked up';
                 update_btn.dataset.status = 'on the way';
@@ -212,19 +216,14 @@ async function change_driver_status(e) {
 driverOrdersList.addEventListener('click', change_driver_status);
 
 async function change_driver_tabs(e) {
-    if (! e.target.classList.contains('tab_head')) 
+    if (!e.target.classList.contains('tab_head'))
 
         return;
-    
-
 
     const tab = e.target.parentElement;
     const url = e.target.dataset.url;
     const companyID = e.target.dataset.companyid;
     const userID = e.target.dataset.userid;
-
-    console.log(e.target.dataset);
-    console.log(userID, companyID, url);
 
     drive_tab.forEach(tab => {
         tab.classList.remove('active__nav')
@@ -243,9 +242,8 @@ async function change_driver_tabs(e) {
     const res = await axios.post(url, {
         userID: userID,
         companyID: companyID
-    }, {"Content-Type": "application/json"});
+    }, { "Content-Type": "application/json" });
 
-    console.log(res.data);
     // load spinner
     if (res.data.status == 'success') {
         driverOrdersList.nextElementSibling.classList.add('hidden');
@@ -267,6 +265,8 @@ async function change_driver_tabs(e) {
                     let statusCol = '';
                     let statusText = '';
                     let display = '';
+                    let driverCollectMoney = '';
+                    let link = res.data.uri;
 
                     if (ord.orderStatus == 'picked up') {
                         btnCol = 'bg-yellow-500';
@@ -293,84 +293,69 @@ async function change_driver_tabs(e) {
                         display = 'inline-block';
                     } else {
                         display = 'hidden';
-                    } currentOrders = currentOrders + ` 
+                    }
+
+                    if (ord.paymentMethod == 'Cash on delivery' && ord.orderStatus == 'done') {
+                        driverCollectMoney = 'data-te-toggle="modal" data-te-target="#staticBackdrop" data-te-ripple-init data-te-ripple-color="light" cashondelivery';
+                    }
+
+                    currentOrders = currentOrders + ` 
                 <div class="overflow-x-visible w-[30%] mt-5 rounded-md shadow-md bg-white px-4">
                     <div class="flex justify-between px-5 pb-2 pt-5 items-center border-b border-gray-300/50 mb-3">
                         <h3 class="text-left">Order 1</h3>
-                        <span class="float-right"><img src="${
-                        res.data.images
-                    }naira.png" class="w-3 h-3 inline-block -mt-1"
-                                alt="">${
-                        amount.toFixed(2)
-                    }</span>
+                        <span class="float-right"><img src="${res.data.images
+                        }naira.png" class="w-3 h-3 inline-block -mt-1"
+                                alt="">${amount.toFixed(2)
+                        }</span>
                     </div>
                     <!-- start poiint and end --->
                     <div class="flex flex-col justify-start items-start text-left">
                         <span
                             class="bg-primary-100 self-end px-3 py-1 rounded-full ${statusCol} text-xs font-light status">
                             ${statusText}</span>
-                        <div class="p-[2px]"><img src="${
-                        res.data.images
-                    }satrt_point.png" class="inline-block w-3 h-3" alt="">
-                            <p class="inline-block text-xs font-bold px-[5px]">${
-                        ord.fullName
-                    }</p>
+                        <div class="p-[2px]"><img src="${res.data.images
+                        }satrt_point.png" class="inline-block w-3 h-3" alt="">
+                            <p class="inline-block text-xs font-bold px-[5px]">${ord.fullName
+                        }</p>
                         </div>
                         <div class="pb-5 px-4 ml-2 border-l border-gray-400/50">
-                            <p class="text-xs font-light font-sans text-gray-600/70">${
-                        ord.address
-                    }</p>
+                            <p class="text-xs font-light font-sans text-gray-600/70">${ord.address
+                        }</p>
                         </div>
 
-                        <div class="p-[2px]"><img src="${
-                        res.data.images
-                    }location.png" class="inline-block w-3 h-4" alt="">
-                            <p class="inline-block text-xs font-bold px-[5px]">${
-                        ord.receiverName
-                    }</p>
+                        <div class="p-[2px]"><img src="${res.data.images
+                        }location.png" class="inline-block w-3 h-4" alt="">
+                            <p class="inline-block text-xs font-bold px-[5px]">${ord.receiverName
+                        }</p>
                         </div>
                         <div class="pb-5 px-4 ml-2">
-                            <p class="text-xs font-light font-sans text-gray-600/70">${
-                        ord.receiverAddress
-                    }</p>
+                            <p class="text-xs font-light font-sans text-gray-600/70">${ord.receiverAddress
+                        }</p>
                         </div>
                         <button type="button"
-                        data-orderID="${
-                        ord.orderID
-                    }" data-url="${
-                        res.data.uri
-                    }dispatch/view_order" data-userid="${
-                        res.data.userID
-                    }" onclick="view_order(this)"
+                        data-orderID="${ord.orderID
+                        }" data-url="${res.data.uri
+                        }dispatch/view_order" data-userid="${res.data.userID
+                        }" onclick="view_order(this)"
                             class="mx-auto -mt-2 mb-2 p-2 text-sm font-sans font-normal text-yellowColor leading-6"
                             data-te-dropdown-item-ref data-te-toggle="modal" data-te-target="#driverOrders"
                             data-te-ripple-init data-te-ripple-color="light">View
-                            more <img src="${
-                        res.data.images
-                    }yellow_arrow_down.png" alt="" class="inline-block ml-2"> </button>
+                            more <img src="${res.data.images
+                        }yellow_arrow_down.png" alt="" class="inline-block ml-2"> </button>
                         <div class="w-full flex flex-row justify-around items-center">
-                            <img src="${
-                        res.data.images
-                    }change_status.png"
+                            <img src="${res.data.images
+                        }change_status.png"
                                 class="w-7 h-7 hover:scale-105 transition-transform ease-linear -mt-4 status_btn ${display}"
                                 alt="">
-                            <button type="button" data-userid="${
-                        res.data.userID
-                    }" data-status="${
-                        ord.orderStatus
-                    }" data-orderid="${
-                        ord.orderID
-                    }" data-packageid="${
-                        ord.packageID
-                    }" data-url="${
-                        res.data.uri
-                    }dispatch/update_status" data-status="${
-                        ord.orderStatus
-                    }"
+                            <button type="button" ${driverCollectMoney} data-userid="${res.data.userID
+                        }" data-status="${ord.orderStatus
+                        }" data-orderid="${ord.orderID
+                        }" data-packageid="${ord.packageID
+                        }" data-url="${link}" data-status="${ord.orderStatus
+                        }"
                                 class="w-10/12 mx-auto px-2 py-1 rounded-full ${btnCol} text-white text-center mb-4 shadow-md hover:scale-105 transition-transform ease-linear outline-none driver_order_status">
-                                <img src="${
-                        res.data.images
-                    }arrow_mark.png" class="inline-block h-3 mr-1 -mt-1" alt="">
+                                <img src="${res.data.images
+                        }arrow_mark.png" class="inline-block h-3 mr-1 -mt-1" alt="">
                                ${btnText}
                             </button>
                         </div>
@@ -385,9 +370,8 @@ async function change_driver_tabs(e) {
             } else {
                 driverOrdersList.innerHTML = ` 
                     <div>
-                        <img class="mt-16 mx-auto" src="${
-                    res.data.images
-                }truck_parcel.png" alt="">
+                        <img class="mt-16 mx-auto" src="${res.data.images
+                    }truck_parcel.png" alt="">
                         <h3 class=" mb-20 font-sans">No dispatch found</h3>
                     </div>
                 `;
@@ -412,87 +396,65 @@ async function change_driver_tabs(e) {
                 <div class="overflow-x-visible w-[30%] mt-5 rounded-md shadow-md bg-white px-4">
                     <div class="flex justify-between px-5 pb-2 pt-5 items-center border-b border-gray-300/50 mb-3">
                         <h3 class="text-left">Order 1</h3>
-                        <span class="float-right"><img src="${
-                        res.data.images
-                    }/naira.png" class="w-3 h-3 inline-block -mt-1"
+                        <span class="float-right"><img src="${res.data.images
+                        }/naira.png" class="w-3 h-3 inline-block -mt-1"
                                 alt="">${amount}</span>
                     </div>
                     <!-- start poiint and end --->
                     <div class="flex flex-col justify-start items-start text-left">
-                        <div class="p-[2px]"><img src="${
-                        res.data.images
-                    }/satrt_point.png" class="inline-block w-3 h-3" alt="">
-                            <p class="inline-block text-xs font-bold px-[5px]">${
-                        ele.fullName
-                    }</p>
+                        <div class="p-[2px]"><img src="${res.data.images
+                        }/satrt_point.png" class="inline-block w-3 h-3" alt="">
+                            <p class="inline-block text-xs font-bold px-[5px]">${ele.fullName
+                        }</p>
                         </div>
                         <div class="pb-5 px-4 ml-2 border-l border-gray-400/50">
-                            <p class="text-xs font-light font-sans text-gray-600/70">${
-                        ele.address
-                    }</p>
+                            <p class="text-xs font-light font-sans text-gray-600/70">${ele.address
+                        }</p>
                         </div>
 
-                        <div class="p-[2px]"><img src="${
-                        res.data.images
-                    }/location.png" class="inline-block w-3 h-4" alt="">
-                            <p class="inline-block text-xs font-bold px-[5px]">${
-                        ele.receiverName
-                    }</p>
+                        <div class="p-[2px]"><img src="${res.data.images
+                        }/location.png" class="inline-block w-3 h-4" alt="">
+                            <p class="inline-block text-xs font-bold px-[5px]">${ele.receiverName
+                        }</p>
                         </div>
                         <div class="pb-5 px-4 ml-2">
-                            <p class="text-xs font-light font-sans text-gray-600/70">${
-                        ele.receiverAddress
-                    }</p>
+                            <p class="text-xs font-light font-sans text-gray-600/70">${ele.receiverAddress
+                        }</p>
                         </div>
-                        <button type="button" data-orderID="${
-                        ele.orderID
-                    }" data-url="${
-                        res.data.uri
-                    }dispatch/view_order" data-userid="${
-                        res.data.userID
-                    }" onclick="view_order(this)"
+                        <button type="button" data-orderID="${ele.orderID
+                        }" data-url="${res.data.uri
+                        }dispatch/view_order" data-userid="${res.data.userID
+                        }" onclick="view_order(this)"
                             class="mx-auto -mt-2 mb-2 p-2 text-sm font-sans font-normal text-yellowColor leading-6"
                             data-te-dropdown-item-ref data-te-toggle="modal" data-te-target="#driverOrders"
                             data-te-ripple-init data-te-ripple-color="light">View
-                            more <img src="${
-                        res.data.images
-                    }/yellow_arrow_down.png" alt="" class="inline-block ml-2"> </button>
+                            more <img src="${res.data.images
+                        }/yellow_arrow_down.png" alt="" class="inline-block ml-2"> </button>
                         <div class="w-full flex flex-row justify-around items-center">
-                            <img src="${
-                        res.data.images
-                    }/change_status.png"
+                            <img src="${res.data.images
+                        }/change_status.png"
                                 class="w-7 h-7 hover:scale-105 transition-transform ease-linear -mt-4 status_btn hidden"
                                 alt="">
                             <div class="flex flex-row justify-center items-center space-x-5 w-full">
-                    <button type="button" data-status="reject" data-userid="${
-                        ele.driverID
-                    }" data-orderid="${
-                        ele.orderID
-                    }" data-packageid="${
-                        ele.packageID
-                    }" data-url=" ${
-                        res.data.uri
-                    }/dispatch/reject_order" onclick="reject_package(this)"
+                    <button type="button" data-status="reject" data-userid="${ele.driverID
+                        }" data-orderid="${ele.orderID
+                        }" data-packageid="${ele.packageID
+                        }" data-url=" ${res.data.uri
+                        }/dispatch/reject_order" onclick="reject_package(this)"
                                     class="w-1/2 mx-auto px-2 py-1 rounded-full bg-[#DE4841] text-white text-center mb-4 shadow-md hover:scale-105 transition-transform ease-linear outline-none driver_order_status">
-                                    <img src="${
-                        res.data.images
-                    }/Remove.png" class="inline-block h-3 mr-1 -mt-1" alt="">
+                                    <img src="${res.data.images
+                        }/Remove.png" class="inline-block h-3 mr-1 -mt-1" alt="">
                                     Reject
                                 </button>
 
-                                <button type="button" data-status="accept" data-userid="${
-                        ele.driverID
-                    }" data-orderid="${
-                        ele.orderID
-                    }" data-packageid="${
-                        ele.packageID
-                    }" data-url="${
-                        res.data.uri
-                    }/dispatch/accept_order" onclick="accept_package(this)"
+                                <button type="button" data-status="accept" data-userid="${ele.driverID
+                        }" data-orderid="${ele.orderID
+                        }" data-packageid="${ele.packageID
+                        }" data-url="${res.data.uri
+                        }/dispatch/accept_order" onclick="accept_package(this)"
                                     class="w-1/2 mx-auto px-2 py-1 rounded-full bg-[#66BD50] text-white text-center mb-4 shadow-md hover:scale-105 transition-transform ease-linear outline-none driver_order_status">
-                                    <img src = "${
-                        res.data.images
-                    }/Assign to driver.png" class = "inline-block h-3 mr-1 -mt-1" alt = "" >
+                                    <img src = "${res.data.images
+                        }/Assign to driver.png" class = "inline-block h-3 mr-1 -mt-1" alt = "" >
                                     Accept
                                 </button>
                             </div>
@@ -506,9 +468,8 @@ async function change_driver_tabs(e) {
             } else {
                 driverOrdersList.innerHTML = ` 
                     <div>
-                        <img class="mt-16 mx-auto" src="${
-                    res.data.images
-                }truck_parcel.png" alt="">
+                        <img class="mt-16 mx-auto" src="${res.data.images
+                    }truck_parcel.png" alt="">
                         <h3 class=" mb-20 font-sans">No dispatch found</h3>
                     </div>
                 `;
@@ -527,31 +488,27 @@ async function change_driver_tabs(e) {
                 driversCompletedOrders = driversCompletedOrders + `   
                     <tr>
                         <td
-                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                            ${
-                    ord.address
-                }</td>
+                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                            ${ord.address
+                    }</td>
 
                         <td
-                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                            ${
-                    ord.pickUpDate
-                }</td>
+                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                            ${ord.pickUpDate
+                    }</td>
 
                         <td
-                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                            ${
-                    ord.receiverAddress
-                }</td>
+                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                            ${ord.receiverAddress
+                    }</td>
                         <td
-                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                            ${
-                    ord.deliveryDate
+                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                            ${ord.deliveryDate
 
-                }</td>
+                    }</td>
 
                         <td
-                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                             <span
                                 class="inline-block whitespace-nowrap rounded-[0.27rem] bg-success-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-success-700">
                                 Completed
@@ -559,19 +516,15 @@ async function change_driver_tabs(e) {
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                 <button type="button"
-                                data-orderID="${
-                    ord.orderID
-                }" data-url="${
-                    res.data.uri
-                }dispatch/view_order" data-userid="${
-                    res.data.userID
-                }" onclick="view_order(this)"
+                                data-orderID="${ord.orderID
+                    }" data-url="${res.data.uri
+                    }dispatch/view_order" data-userid="${res.data.userID
+                    }" onclick="view_order(this)"
                                 class="mx-auto -mt-2 mb-2 p-2 text-sm font-sans font-normal text-yellowColor leading-6"
                                 data-te-dropdown-item-ref data-te-toggle="modal" data-te-target="#driverOrders"
                                 data-te-ripple-init data-te-ripple-color="light">View
-                                more <img src="${
-                    res.data.images
-                }yellow_arrow_down.png" alt="" class="inline-block ml-2"> 
+                                more <img src="${res.data.images
+                    }yellow_arrow_down.png" alt="" class="inline-block ml-2"> 
                             </button>
                         </td>
                     </tr>
@@ -642,14 +595,12 @@ async function view_order(e) {
     const orderID = e.dataset.orderid;
     const userID = e.dataset.userid;
 
-    console.log(url, orderID, userID)
 
     // send request
     const res = await axios.post(url, {
         orderID: orderID,
         userID: userID
-    }, {"Content-Type": "application/json"});
-    console.log(res.data);
+    }, { "Content-Type": "application/json" });
 
     if (res.data.status == 'success') { // remove spinner
         spinner.classList.add('hidden');
@@ -671,11 +622,9 @@ async function view_order(e) {
         // // loop through and get items
         packageItems.forEach(itm => {
             amount = amount + itm.Price;
-            item = item + `<li class="list-disc">${
-                itm.item_name
-            }<span class="rounded-full bg-gray-300 p-1 text-xs text-black/50 inline-block ml-2">x ${
-                itm.item_quantiy
-            }</span></li>`;
+            item = item + `<li class="list-disc">${itm.item_name
+                }<span class="rounded-full bg-gray-300 p-1 text-xs text-black/50 inline-block ml-2">x ${itm.item_quantiy
+                }</span></li>`;
         })
 
         document.querySelector('.packageItems').innerHTML = item;
@@ -696,10 +645,9 @@ async function accept_package(e) {
         driverID: userID,
         orderID: orderID,
         packageID: packageID
-    }, {"Content-Type": "application/json"})
+    }, { "Content-Type": "application/json" })
 
 
-    console.log(res.data);
     if (res.data.status == "success") {
         display_msg(res.data.message);
         container.remove();
@@ -708,9 +656,8 @@ async function accept_package(e) {
         if (driverOrdersList.children.length == 0) {
             driverOrdersList.innerHTML = ` 
                     <div>
-                        <img class="mt-16 mx-auto" src="${
-                res.data.images
-            }truck_parcel.png" alt="">
+                        <img class="mt-16 mx-auto" src="${res.data.images
+                }truck_parcel.png" alt="">
                         <h3 class=" mb-20 font-sans">No dispatch found</h3>
                     </div>
                 `;
@@ -729,9 +676,7 @@ async function reject_package(e) {
         driverID: userID,
         orderID: orderID,
         packageID: packageID
-    }, {"Content-Type": "application/json"})
-
-    console.log(res.data);
+    }, { "Content-Type": "application/json" });
 
     if (res.data.status == "success") {
         display_msg(res.data.message);
@@ -741,9 +686,8 @@ async function reject_package(e) {
         if (driverOrdersList.children.length == 0) {
             driverOrdersList.innerHTML = ` 
                     <div>
-                        <img class="mt-16 mx-auto" src="${
-                res.data.images
-            }truck_parcel.png" alt="">
+                        <img class="mt-16 mx-auto" src="${res.data.images
+                }truck_parcel.png" alt="">
                         <h3 class=" mb-20 font-sans">No dispatch found</h3>
                     </div>
                 `;
@@ -752,28 +696,25 @@ async function reject_package(e) {
 
 }
 
-async function update_status(e) {
-    console.log(e.getAttribute('packageid'));
+async function driver_accept_payment(e) {
     const res = await axios.post(e.dataset.url, {
         packageID: e.getAttribute('packageid'),
         orderID: e.getAttribute('orderid'),
         userID: e.getAttribute('userid'),
-        amount: 'ss',
+        amount: e.getAttribute('amount'),
         type: 'done',
         payment: true,
         method: 'update'
-    }, {"Content-Type": "application/json"})
+    }, { "Content-Type": "application/json" })
 
-    console.log(res.data);
     if (res.data.status == 'success') {
         document.querySelector('.close_btn').click();
 
         // remove the container row
         let emptyOrder = `
                 <div>
-                    <img class="mt-16 mx-auto" src="${
-            res.data.images
-        }truck_parcel.png" alt="">
+                    <img class="mt-16 mx-auto" src="${res.data.images
+            }truck_parcel.png" alt="">
                     <h3 class=" mb-20 font-sans">No dispatch found</h3>
                 </div>
             `;
@@ -783,9 +724,10 @@ async function update_status(e) {
             overallContainer.innerHTML = emptyOrder;
         }
 
+        // alert message 
+        display_msg(res.data.message)
+
     }
-
-
 }
 
 function display_msg(text) {
@@ -807,5 +749,19 @@ function display_msg(text) {
         willClose: () => {
             clearInterval(timerInterval)
         }
+    })
+}
+
+function addAttribute(element, attribute) {
+    // add atrribute to function
+    Object.keys(attribute).forEach(attr => {
+        element.setAttribute(attr, attribute[attr]);
+    })
+}
+
+function removeAttribute(element, attribute) {
+    Object.keys(attribute).forEach(attr => {
+        console.log(attr);
+        element.removeAttribute(attr);
     })
 }

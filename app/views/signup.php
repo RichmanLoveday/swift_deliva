@@ -13,13 +13,15 @@
                     <div class="md:w-1/2 w-full">
                         <label for="fname" class="text-left font-sans text-gray-500">First
                             Name</label><br>
-                        <input id="fname" type="text" name="firstName" class="w-full mt-2 border-0 rounded-md firstName" required>
+                        <input id="fname" type="text" name="firstName" class="w-full mt-2 border-0 rounded-md firstName"
+                            required>
                         <span class="text-yellowColor font-sans text-[10px] font-semibold italic hidden">Please enter
                             your First Name.</span>
                     </div>
                     <div class="md:w-1/2 w-full">
                         <label for="fname" class="text-left font-sans text-gray-500">Last Name</label><br>
-                        <input id="fname" type="text" name="lastName" class="w-full mt-2 border-0 active:border-yellowColor rounded-md lastName" required>
+                        <input id="fname" type="text" name="lastName"
+                            class="w-full mt-2 border-0 active:border-yellowColor rounded-md lastName" required>
                         <span class="text-yellowColor font-sans text-[10px] font-semibold italic hidden">Please enter
                             your Last Name.</span>
                     </div>
@@ -28,14 +30,27 @@
                 <div class="w-full mb-4 mt-5 flex justify-center flex-col md:flex-row items-center space-x-6 px-10">
                     <div class="md:w-1/2 w-full">
                         <label for="email" class="text-left font-sans text-gray-500">Email Address</label><br>
-                        <input id="fname" type="email" name="email" class="w-full mt-2 border-0 active:border-yellowColor rounded-md email" required>
+                        <input id="fname" type="email" name="email"
+                            class="w-full mt-2 border-0 active:border-yellowColor rounded-md email" required>
                         <span class="text-yellowColor font-sans text-[10px] font-semibold italic hidden">Please enter
                             your Email Address.</span>
                     </div>
                 </div>
+                <div class="w-full mb-4 mt-5 flex justify-center flex-col md:flex-row items-center space-x-6 px-10">
+                    <div class="md:w-1/2 w-full text-left">
+                        <label for="phone" class="text-left font-sans text-gray-500">Phone number</label><br>
+                        <input id="phone" type="text" name="phone" class="w-full mt-2 border-0 rounded-md phone"
+                            required>
+                        <span class="text-yellowColor font-sans text-[10px] font-semibold italic hidden">Please enter
+                            phone
+                            number
+                        </span>
+                    </div>
+                </div>
                 <div class="w-full mb-4 mt-5 px-10">
-                    <label for="accountType" class="text-left font-sans text-gray-500">Select LGA</label><br>
-                    <select class="w-full p-1 border-0 border-red rounded-lg placeholder:p-1" data-te-select-init data-te-select-filter="true" name="accountType" id="acct_type" required>
+                    <label for="accountType" class="text-left font-sans text-gray-500">Select Account Type</label><br>
+                    <select class="w-full p-1 border-0 border-red rounded-lg placeholder:p-1 text-black"
+                        data-te-select-init data-te-select-filter="true" name="accountType" id="acct_type" required>
                         <option value="0">Select account type</option>
                         <option value="Business">Business</option>
                         <option value="Customer">Customer</option>
@@ -45,9 +60,10 @@
                         Account Type.</span>
                 </div>
 
-                <div class="w-full mb-4 mt-5 px-10">
+                <div class="w-full mb-4 mt-5 px-10 stateContainer">
                     <label for="state" class="text-left font-sans text-gray-500">Select State</label><br>
-                    <select class="w-full p-1 border-0 border-red rounded-lg placeholder:p-1" data-te-select-init data-te-select-filter="true" name="state" id="state">
+                    <select class="w-full p-1 border-0 border-red rounded-lg placeholder:p-1" data-te-select-init
+                        data-te-select-filter="true" name="state" id="state" onchange="toggleLGA(this)">
                         <option value="0" selected="selected">- Select a State-</option>
                         <option value="Abia">Abia</option>
                         <option value="Adamawa">Adamawa</option>
@@ -94,7 +110,8 @@
 
                 <div class="w-full mb-4 mt-5 px-10">
                     <label for="lga" class="text-left font-sans text-gray-500">Select LGA</label><br>
-                    <select class="w-full p-1 border-2 border-red rounded-lg placeholder:p-1 select-lga bg-white" data-te-select-init data-te-select-filter="true" name="lga" id="lga">
+                    <select class="w-full p-1 border-2 border-red rounded-lg placeholder:p-1 select-lga bg-white"
+                        data-te-select-init data-te-select-filter="true" name="lga" id="lga">
                         <option value="Select LGA..." selected="selected">Select LGA...</option>
                     </select>
                     <span class="text-yellowColor font-sans text-[10px] font-semibold italic hidden errorLga">Please
@@ -102,10 +119,23 @@
                         Local Government Area (LGA).</span>
                 </div>
 
+                <div class="w-full mb-4 mt-5 px-10">
+                    <label for="home_address" class="text-left font-sans text-gray-500">Enter Home
+                        Address
+                    </label>
+                    <textarea
+                        class="homeAdds peer block min-h-[auto] w-full rounded-md border-0 bg-white px-3 mt-2 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none text-neutral-800 placeholder:text-neutral-800 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                        id="home_address" rows="3" placeholder="Your message"></textarea>
+                    <span
+                        class="text-yellowColor font-sans text-[10px] font-semibold italic hidden errorHomeAds mt-2">Please
+                        enter home address.</span>
+                </div>
+
                 <div class="w-full mb-4 mt-5 flex justify-center flex-col md:flex-row items-center px-10">
                     <div class="md:w-1/2 w-full">
                         <label for="password" class="text-left font-sans text-gray-500">Password</label><br>
-                        <input id="password" type="password" name="password" class="w-full mt-2 border-0 active:border-yellowColor rounded-md">
+                        <input id="password" type="password" name="password"
+                            class="w-full mt-2 border-0 active:border-yellowColor rounded-md">
                         <span class="text-yellowColor font-sans text-[10px] font-semibold italic hidden"></span>
                     </div>
 
@@ -113,13 +143,16 @@
                         <div class="md:w-1/2 w-full">
                             <label for="confirm_password" class="text-left font-sans text-gray-500">Confirm
                                 Password</label><br>
-                            <input id="confirm_password" type="password" name="confirm_password" class="w-full mt-2 border-0 active:border-yellowColor rounded-md">
+                            <input id="confirm_password" type="password" name="confirm_password"
+                                class="w-full mt-2 border-0 active:border-yellowColor rounded-md">
                             <span class="text-yellowColor font-sans text-[10px] font-semibold italic hidden"></span>
                         </div>
                     </div>
                 </div>
                 <div class="text-center">
-                    <button id="continueBtn" class="border border-yellowColor px-9 py-3 mt-4 rounded-md bg-yellowColor text-white transition duration-150 hover:ease-in" data-url="<?= ROOT ?>signup">Continue
+                    <button id="continueBtn"
+                        class="border border-yellowColor px-9 py-3 mt-4 rounded-md bg-yellowColor text-white transition duration-150 hover:ease-in"
+                        data-url="<?= ROOT ?>signup">Continue
                     </button>
                 </div>
             </div>
@@ -133,14 +166,17 @@
                     <div class="md:w-1/2 w-full text-left">
                         <label for="fname" class="text-left font-sans text-gray-500">Business
                             Name</label><br>
-                        <input id="fname" type="text" name="businessName" class="w-full mt-2 border-0 rounded-md busName" required>
+                        <input id="fname" type="text" name="businessName"
+                            class="w-full mt-2 border-0 rounded-md busName" required>
                         <span class="text-yellowColor font-sans text-[10px] font-semibold italic hidden">Please
                             enter
                             your Business Name.</span>
                     </div>
-                    <div class="w-full mb-4 mt-5 text-left">
+                    <div class="w-full mb-4 mt-5 text-left stateContainer">
                         <label for="fname" class="text-left font-sans text-gray-500">Select State</label><br>
-                        <select class="w-full p-1 border-0 border-red rounded-lg placeholder:p-1 busState" data-te-select-init data-te-select-filter="true" name="state" id="stateBus">
+                        <select class="w-full p-1 border-0 border-red rounded-lg placeholder:p-1 busState"
+                            data-te-select-init data-te-select-filter="true" name="state" id="state"
+                            onchange="toggleLGA(this)">
                             <option value="0" selected="selected">- Select a State-</option>
                             <option value="Abia">Abia</option>
                             <option value="Adamawa">Adamawa</option>
@@ -180,7 +216,8 @@
                             <option value="Yobe">Yobe</option>
                             <option value="Zamfara">Zamafara</option>
                         </select>
-                        <span class="text-yellowColor font-sans text-[10px] font-semibold italic hidden errorState">Please
+                        <span
+                            class="text-yellowColor font-sans text-[10px] font-semibold italic hidden errorState">Please
                             select a
                             State.
                         </span>
@@ -188,7 +225,9 @@
 
                     <div class="w-full mb-4 mt-5 text-left">
                         <label for="fname" class="text-left font-sans text-gray-500">Select LGA</label><br>
-                        <select class="w-full p-1 border-2 border-red rounded-lg placeholder:p-1 busLga bg-white" data-te-select-init data-te-select-filter="true" name="lga" id="lga">
+                        <select
+                            class="w-full p-1 border-2 border-red rounded-lg placeholder:p-1 busLga select-lga bg-white"
+                            data-te-select-init data-te-select-filter="true" name="lga" id="lga">
                             <option value="0" selected="selected">Select LGA...</option>
                         </select>
                         <span class="text-yellowColor font-sans text-[10px] font-semibold italic hidden errorLga">Please
@@ -197,13 +236,15 @@
                         </span>
                     </div>
                     <div class="md:w-1/2 w-full text-left">
-                        <label for="fname" class="text-left font-sans text-gray-500">Phone number</label><br>
-                        <input id="fname" type="text" name="businessName" class="w-full mt-2 border-0 rounded-md businessName" required>
+                        <label for="businessPhone" class="text-left font-sans text-gray-500">Phone number</label><br>
+                        <input id="businessPhone" type="text" name="businessPhone"
+                            class="w-full mt-2 border-0 rounded-md businessName businessPhone" required>
                         <span class="text-yellowColor font-sans text-[10px] font-semibold italic hidden">Please enter
-                            your First Name.
+                            phone number
                         </span>
                     </div>
-                    <button id="businessBtn" data-url="<?= ROOT ?>signup/business" class="border border-yellowColor px-9 py-3 mt-4 rounded-md bg-yellowColor text-white transition duration-150 hover:ease-in">Create
+                    <button id="businessBtn" data-url="<?= ROOT ?>signup/business"
+                        class="border border-yellowColor px-9 py-3 mt-4 rounded-md bg-yellowColor text-white transition duration-150 hover:ease-in">Create
                         Account
                     </button>
                 </form>

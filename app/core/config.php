@@ -78,7 +78,8 @@ define('NOT_PAID', 0);
 define('PAID', 1);
 
 // Tracking descripton
-define('START', 'Start');
+define('PEDNING', 'Pending');
+define('APPROVED', 'Approved');
 define('DRIVING', 'Driving to pickup');
 define('DRIVED_PICKED_UP', 'Picked Up');
 define('ONTHEWAY', 'On the way');

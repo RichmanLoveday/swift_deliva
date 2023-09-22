@@ -14,19 +14,16 @@ class Payment extends Models {
 
     public function store_payment($data, $orderID)
     {
-       // show($data); 
        
         // store receiver * generate unique id
         $id = generateUniqueIDWithDateTime();
 
         $pay['id'] = $id;
         $pay['orderID'] = $orderID;
-        $pay['referenceID'] = $data->transaction;
-        $pay['amount'] = $data->amount;
+        $pay['referenceID'] = $data->transaction ?? '';
+        $pay['amount'] = (int) str_replace([',', '.'], '', $data->amount);
         $pay['method'] = $data->paymentMethod;
         $pay['date'] = date("Y-m-d H:i:s");
-
-
 
         $query = "INSERT INTO payment (paymentID, orderID, referenceID, paymentAmount, paymentMethod, date) values (:id, :orderID, :referenceID, :amount, :method, :date)";
         $result = $this->Database->write($query, $pay);

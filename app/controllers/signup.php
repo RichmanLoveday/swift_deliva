@@ -58,6 +58,7 @@ class Signup extends Controller
 
     public function business()
     {
+      //show($this->fetch); die;
         $new_user = $this->usersM->sign_up($this->fetch);
         if ($new_user) {
             $data['status'] = 'success';

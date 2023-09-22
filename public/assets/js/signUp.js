@@ -15,8 +15,8 @@ const setAttributes = (el, attrs) => {
 };
 
 const toggleLGA = e => {
-    console.log(e)
-    let state = e.target.value; // Get value of state
+
+    let state = e.value; // Get value of state
     let selectLGAOption = ["Select LGA..."], // Define this once so as not to repeat it multiple times
         lgaList = {
             Abia: [
@@ -902,8 +902,10 @@ const toggleLGA = e => {
         ...Object.values(lgaList)
     ], // Join select LGA option with list of LGAs
 
-        lgaSelect = document.querySelector(".select-lga"), // Get the LGA select element
-        length = lgaSelect.options.length;
+        // Get the LGA select element
+        lgaSelect = e.closest('.stateContainer').nextElementSibling.children[2].children['lga'];
+
+    let length = lgaSelect.options.length;
     // Get number of options already existing in LGA select element
 
     // Clear LGS select element
@@ -927,8 +929,8 @@ const toggleLGA = e => {
         lgaSelect.appendChild(opt);
     });
 };
-document.getElementById('state').addEventListener('change', toggleLGA);
-document.getElementById('stateBus').addEventListener('change', toggleLGA);
+//document.getElementById('state').addEventListener('change', toggleLGA);
+//document.getElementById('stateBus').addEventListener('change', toggleLGA);
 
 
 // validate form
@@ -940,6 +942,8 @@ function create_account(e) {
     const accountType = document.querySelector("#acct_type");
     const lgaSelect = document.querySelector("#lga");
     const state = document.querySelector("#state");
+    const phone = document.querySelector("#phone");
+    const homeAds = document.querySelector('.homeAdds');
     const password = document.querySelector("#password");
     const confirmPassword = document.querySelector("#confirm_password");
 
@@ -965,6 +969,14 @@ function create_account(e) {
         formDatas.userDetails.lastName = lastName.value;
     }
 
+    if (phone.value.trim() === "") {
+        phone.nextElementSibling.classList.remove('hidden');
+        error = true;
+    } else {
+        phone.nextElementSibling.classList.add('hidden');
+        formDatas.userDetails.phone = phone.value;
+    }
+
 
     if (!isValidEmail(email.value)) {
         email.nextElementSibling.classList.remove('hidden');
@@ -983,7 +995,6 @@ function create_account(e) {
 
     }
 
-
     if (state.value === "0") {
         document.querySelector('.errorState').classList.remove('hidden');
         error = true;
@@ -1000,6 +1011,16 @@ function create_account(e) {
     } else {
         document.querySelector('.errorLga').classList.add('hidden');
         formDatas.userDetails.lga = lgaSelect.value;
+    }
+
+    if (homeAds.value.trim() === "") {
+        homeAds.nextElementSibling.classList.remove('hidden');
+        homeAds.nextElementSibling.classList.add('block');
+        error = true;
+    } else {
+        homeAds.nextElementSibling.classList.remove('block');
+        homeAds.nextElementSibling.classList.add('hidden');
+        formDatas.userDetails.homeAds = homeAds.value;
     }
 
 
@@ -1037,11 +1058,16 @@ function create_account(e) {
         e.target.closest('.create_account').classList.add('hidden');
         document.querySelector('.choose_business').classList.remove('hidden');
         document.querySelector('.choose_business').classList.add('flex');
+
+        const businessPhone = document.querySelector('#businessPhone');
+        businessPhone.value = phone.value
+        businessPhone.setAttribute('disabled', '');
     }
 
     if (!error && accountType.value == 'Customer') { // send data to ajax
         formDatas.type = 'customer';
         e.target.classList.add('disabled');
+        console.log(formDatas);
         async function test() {
             const res = await axios.post(url, formDatas, { "Content-Type": "multipart/form-data" });
 
@@ -1065,7 +1091,6 @@ function create_account(e) {
 }
 
 const create_business = e => {
-    console.log(e);
     e.preventDefault();
     const bussinessName = document.querySelector(".busName");
     const busState = document.querySelector(".busState");
@@ -1092,19 +1117,18 @@ const create_business = e => {
         formDatas.businessDetails.companyState = busState.value;
     }
 
-    // if (busLga.value === "0") {
-    //     document.querySelector('.errorLga').classList.remove('hidden');
-    //     error = true;
-    // } else {
-    //     document.querySelector('.errorLga').classList.add('hidden');
-    //     formDatas.businessDetails.companyLga = busLga.value;
-    // }
+    if (busLga.value === "0") {
+        document.querySelector('.errorLga').classList.remove('hidden');
+        error = true;
+    } else {
+        document.querySelector('.errorLga').classList.add('hidden');
+        formDatas.businessDetails.companyLga = busLga.value;
+    }
 
     console.log(error)
     if (!error) { // send data to ajax
         formDatas.type = 'business';
         e.target.classList.add('disabled');
-        console.log(formDatas);
         async function test() {
             const res = await axios.post(url, formDatas, { "Content-Type": "multipart/form-data" });
             console.log(res.data);

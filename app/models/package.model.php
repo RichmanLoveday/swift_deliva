@@ -108,7 +108,7 @@ class Package extends Models
         }
         
         if(is_array($result)) {
-            return $result;
+            return $result[0];
         }
 
         return false;
