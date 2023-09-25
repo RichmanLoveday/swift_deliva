@@ -16,12 +16,20 @@ class Driver extends Models
     {
     }
 
-    public function get_all_drivers_by_company_id($companyID)
+    public function get_all_drivers_by_company_id($companyID, $status = NULL)
     {
-        $query = "SELECT * FROM driver as dri JOIN company as com ON dri.companyName = com.companyID JOIN users as u ON  dri.driverName = u.userID WHERE dri.companyName = :companyId ORDER BY dri.id DESC";
-        $result = $this->DB->read($query, ['companyId' => $companyID]);
+        if($status == NULL) {
+            $query = "SELECT * FROM driver as dri JOIN company as com ON dri.companyName = com.companyID JOIN users as u ON  dri.driverName = u.userID WHERE dri.companyName = :companyId ORDER BY dri.id DESC";
+            $result = $this->DB->read($query, ['companyId' => $companyID]);
+    
+            return is_array($result) ? $result : false;
+        }
+
+        $query = "SELECT * FROM driver as dri JOIN company as com ON dri.companyName = com.companyID JOIN users as u ON  dri.driverName = u.userID WHERE dri.companyName = :companyId AND u.status = :onduty ORDER BY dri.id DESC";
+        $result = $this->DB->read($query, ['companyId' => $companyID, 'onduty' => $status]);
 
         return is_array($result) ? $result : false;
+        
     }
 
 
@@ -313,6 +321,14 @@ class Driver extends Models
         $query = "SELECT * FROM orders as o JOIN packages p ON p.packageID = o.packageID JOIN receiver as r ON r.receiverID = p.receiverID JOIN users as u ON u.userID = p.senderID WHERE o.driverID = :driverID AND o.companyID = :companyID AND o.order_status = :started OR o.order_status = :pickup OR o.order_status = :onway";
 
         $result = $this->DB->read($query, ['driverID' => $driverID, 'companyID' => $companyID, 'started' => STARTING, 'pickup' => PICKED_UP, 'onway' => ONWAY]);
+
+        return is_array($result) ? $result : [];
+    }
+
+    public function getDriveActiveOrd($driverID) {
+        $query = "SELECT * FROM orders as o JOIN users as u ON u.userID = o.driverID WHERE o.driverID = :driverID AND (o.order_status = :started OR o.order_status = :pickup OR o.order_status = :waiting OR o.order_status = :onway)";
+
+        $result = $this->DB->read($query, ['driverID' => $driverID, 'started' => STARTING, 'pickup' => PICKED_UP, 'onway' => ONWAY, 'waiting' => WAITING]);
 
         return is_array($result) ? $result : [];
     }

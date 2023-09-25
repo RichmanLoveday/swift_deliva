@@ -5,7 +5,7 @@
     <ul class="relative m-0 list-none px-[0.2rem]" data-te-sidenav-menu-ref>
         <li class="relative">
             <a href="<?= ROOT ?>dashboard"
-                class="flex group h-12 cursor-pointer items-center truncate rounded-[5px] px-6 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-slate-50 hover:text-inherit hover:outline-none focus:bg-yel focus:text-inherit focus:outline-none active:bg-yellowColor active:text-white active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
+                class="flex group h-12 cursor-pointer items-center truncate rounded-[5px] px-6 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:text-inherit hover:outline-none focus:bg-yellowColor focus:text-inherit focus:outline-none active:bg-yellowColor hover:bg-yellow-500 hover:text-white active:text-white active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
                 data-te-sidenav-link-ref>
                 <span class="mr-4 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400">
                     <i class="fa fa-tachometer" aria-hidden="true"></i>
@@ -25,7 +25,7 @@
         <?php if($role == ADMIN || $role == CUSTOMER): ?>
         <li class="relative">
             <a href="<?= ROOT ?>packages"
-                class="flex group h-12 cursor-pointer items-center truncate rounded-[5px] px-6 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-slate-50 hover:text-inherit hover:outline-none focus:bg-yel focus:text-inherit focus:outline-none active:bg-yellowColor active:text-white active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
+                class="flex group h-12 cursor-pointer items-center truncate rounded-[5px] px-6 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear  hover:bg-yellow-500 hover:text-white hover:text-inherit hover:outline-none focus:bg-yel focus:text-inherit focus:outline-none active:bg-yellowColor active:text-white active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
                 data-te-sidenav-link-ref>
                 <span class="mr-4 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400">
                     <i class="fa fa-credit-card-alt" aria-hidden="true"></i>
@@ -46,7 +46,7 @@
         <?php if($role == DRIVER): ?>
         <li class="relative">
             <a href="<?= ROOT ?>dispatch"
-                class="flex group h-12 cursor-pointer items-center truncate rounded-[5px] px-6 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-slate-50 hover:text-inherit hover:outline-none focus:bg-yellowColor focus:text-inherit focus:outline-none active:bg-yellowColor active:text-white active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
+                class="flex group h-12 cursor-pointer items-center truncate rounded-[5px] px-6 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear  hover:bg-yellow-500 hover:text-white hover:text-inherit hover:outline-none focus:bg-yellowColor focus:text-inherit focus:outline-none active:bg-yellowColor active:text-white active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
                 data-te-sidenav-link-ref>
                 <span class="mr-4 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400">
                     <i class="fa fa-truck" aria-hidden="true"></i>
@@ -68,7 +68,7 @@
         <?php if($role == ADMIN || $role == SUPER_ADMIN): ?>
         <li class="relative">
             <a href="<?= ROOT ?>order"
-                class="flex group h-12 cursor-pointer items-center truncate rounded-[5px] px-6 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-slate-50 hover:text-inherit hover:outline-none focus:bg-yel focus:text-inherit focus:outline-none active:bg-yellowColor active:text-white active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
+                class="flex group h-12 cursor-pointer items-center truncate rounded-[5px] px-6 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear  hover:bg-yellow-500 hover:text-white hover:text-inherit hover:outline-none focus:bg-yel focus:text-inherit focus:outline-none active:bg-yellowColor active:text-white active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
                 data-te-sidenav-link-ref>
                 <span class="mr-4 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400">
                     <i class="fa fa-shopping-cart" aria-hidden="true"></i>
@@ -87,7 +87,7 @@
         </li>
         <li class="relative">
             <a href="<?= ROOT ?>drivers"
-                class="flex group h-12 cursor-pointer items-center truncate rounded-[5px] px-6 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-slate-50 hover:text-inherit hover:outline-none focus:bg-yel focus:text-inherit focus:outline-none active:bg-yellowColor active:text-white active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
+                class="flex group h-12 cursor-pointer items-center truncate rounded-[5px] px-6 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear  hover:bg-yellow-500 hover:text-white hover:text-inherit hover:outline-none focus:bg-yel focus:text-inherit focus:outline-none active:bg-yellowColor active:text-white active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
                 data-te-sidenav-link-ref>
                 <span class="mr-4 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400">
                     <i class="fa fa-car" aria-hidden="true"></i>
@@ -106,7 +106,7 @@
         </li>
         <li class="relative">
             <a href="<?= ROOT ?>orders/payments"
-                class="flex group h-12 cursor-pointer items-center truncate rounded-[5px] px-6 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-slate-50 hover:text-inherit hover:outline-none focus:bg-yel focus:text-inherit focus:outline-none active:bg-yellowColor active:text-white active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
+                class="flex group h-12 cursor-pointer items-center truncate rounded-[5px] px-6 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear  hover:bg-yellow-500 hover:text-white hover:text-inherit hover:outline-none focus:bg-yel focus:text-inherit focus:outline-none active:bg-yellowColor active:text-white active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
                 data-te-sidenav-link-ref>
                 <span class="mr-4 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400">
                     <i class="fa fa-credit-card-alt" aria-hidden="true"></i>
@@ -125,7 +125,7 @@
         </li>
         <li class="relative">
             <a href="<?= ROOT ?>history"
-                class="flex group h-12 cursor-pointer items-center truncate rounded-[5px] px-6 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-slate-50 hover:text-inherit hover:outline-none focus:bg-yel focus:text-inherit focus:outline-none active:bg-yellowColor active:text-white active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
+                class="flex group h-12 cursor-pointer items-center truncate rounded-[5px] px-6 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear  hover:bg-yellow-500 hover:text-white hover:text-inherit hover:outline-none focus:bg-yel focus:text-inherit focus:outline-none active:bg-yellowColor active:text-white active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
                 data-te-sidenav-link-ref>
                 <span class="mr-4 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400">
                     <i class="fa fa-history" aria-hidden="true"></i>

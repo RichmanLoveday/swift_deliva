@@ -33,5 +33,10 @@ class Payment extends Models {
         return false;
     }
 
-    public function get_payments() {}
+    public function get_payment($orderID) {
+        $query = "SELECT * FROM payment WHERE orderID = :id";
+        $result = $this->Database->read($query, ['id' => $orderID]);
+
+        return is_array($result) ? $result : false;
+    }
 }

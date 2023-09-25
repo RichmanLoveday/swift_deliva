@@ -130,6 +130,7 @@ class Orders extends Models {
 
         return is_array($result) ? $result : [];
     }
+    
 
     public function get_incomplete_orders_by_company_id($companyID)
     {
@@ -171,5 +172,6 @@ class Orders extends Models {
 
         return is_array($result) ? $result : [];
     }
+    
 
 }

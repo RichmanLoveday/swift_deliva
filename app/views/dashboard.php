@@ -14,9 +14,11 @@
             $offlne = '';
             $online = '';
             if($status == ONDUTY) {
+                $offlne = "opacity-100";
                 $online = 'hidden opacity-0';
-                $offlne = 'opacity-100';
-            } else {
+            } 
+            
+            if($status == OFFLINE) {
                 $online = 'opacity-100';
                 $offlne = 'hidden opacity-0';
             }
@@ -46,7 +48,7 @@
             <div
                 class="border-l-4 rounded-md shadow-md bg-white border-yellow-950/70 space-y-5 px-4 py-4 text-left w-[20%] mx-4 my-2">
                 <p class="font-sans font-semibold leading-tight text-xs text-black/50">Total Order</p>
-                <span class="text-left text-xl font-semibold font-sans text-black/60">110 Orders</span>
+                <span class="text-left text-xl font-semibold font-sans text-black/60"><?=$totalOrders?> Orders</span>
             </div>
             <?php endif;?>
 
@@ -55,7 +57,7 @@
                 class="border-l-4 rounded-md shadow-md bg-white border-[#1D409C]  space-y-5 px-4 py-4 text-left w-[20%] mx-4 my-2">
                 <p class="font-sans font-semibold leading-tight text-xs text-black/50">Total
                     deliveries</p>
-                <span class="text-left text-xl font-semibold font-sans text-black/60">20 deliveries</span>
+                <span class="text-left text-xl font-semibold font-sans text-black/60"><?=$deliverys?> deliveries</span>
             </div>
             <?php endif; ?>
 
@@ -64,7 +66,7 @@
             <div
                 class="border-l-4 rounded-md shadow-md bg-white border-[#2ECC75]  space-y-5 px-4 py-4 text-left w-[20%] mx-4 my-2">
                 <p class="font-sans font-semibold leading-tight text-xs text-black/50">Total drivers</p>
-                <span class="text-left text-xl font-semibold font-sans text-black/60">30 drivers</span>
+                <span class="text-left text-xl font-semibold font-sans text-black/60"><?=$drivers?> drivers</span>
             </div>
             <?php endif; ?>
 
@@ -74,7 +76,7 @@
                 class="border-l-4 rounded-md shadow-md bg-white border-[#EF934D] space-y-2 px-4 py-4 text-left w-[20%] mx-4 my-2">
                 <p class="font-sans font-semibold leading-tight text-xs text-black/50">Earning</p>
                 <span class="text-left text-xl font-semibold font-sans text-black/60 flex"><img
-                        src="<?= IMAGES ?>naira.png" class="w-4 h-4 mt-[6px]" alt=""> 10</span>
+                        src="<?= IMAGES ?>naira.png" class="w-4 h-4 mt-[7px] mr-1" alt=""><?= $earnings?></span>
             </div>
             <?php endif; ?>
         </div>
@@ -88,14 +90,14 @@
                     <h5 class="text-xs text-left font-sans text-black/60 font-semibold">Active Orders</h5>
                     <div
                         class="h-5 w-5 flex justify-center mr-2 items-center rounded-full text-white text-xs font-light font-sans bg-yellowColor">
-                        5
+                        <?=$activeOrders?>
                     </div>
                 </div>
                 <div class="flex flex-row justify-between items-center p-2 rounded-md bg-white shadow-sm">
                     <h5 class="text-xs text-left font-sans text-black/60 font-semibold">Late orders</h5>
                     <div
                         class="h-5 w-5 flex justify-center mr-2 items-center rounded-full text-white text-xs font-light font-sans bg-yellowColor">
-                        5
+                        <?=$lateOrders?>
                     </div>
                 </div>
                 <div class="flex flex-row justify-between items-center p-2 rounded-md bg-white shadow-sm">
@@ -109,39 +111,68 @@
             <div class="mt-[2px] w-[80%] border-r border-t border-gray-300/50">
                 <div class="flex md:flex-row flex-col items-start justify-between">
                     <div class="w-1/3 flex flex-col available_drivers">
+                        <?php foreach($driverPackage as $drive): ?>
                         <div class="w-full text-gray-700 font-semibold rounded-l-sm bg-white text-sm text-left pl-4 font-sans py-3 border-l-4 border-yellowColor flex justify-between driver transition ease-linear"
                             data-id="1" data-url="url">
-                            <h5 class="text-xs">Richman Loveday</h5>
+                            <h5 class="text-xs"><?=$drive->driverName?></h5>
                             <div
                                 class="h-5 w-5 flex justify-center mr-2 p-2 items-center rounded-full text-white text-xs font-light font-sans bg-yellowColor">
-                                5
+                                <?=count($drive->orders)?>
                             </div>
                         </div>
-                        <div class="w-full text-gray-700 font-semibold rounded-l-sm text-sm text-left pl-4 font-sans py-3 flex justify-between transition ease-linear driver"
+                        <?php endforeach; ?>
+                        <!-- <div class="w-full text-gray-700 font-semibold rounded-l-sm text-sm text-left pl-4 font-sans py-3 flex justify-between transition ease-linear driver"
                             data-id="1" data-url="url">
                             <h5 class="text-xs">Simon John</h5>
                             <div
                                 class="h-5 w-5 flex justify-center items-center p-2  mr-2 rounded-full text-white text-xs font-light font-sans bg-yellowColor">
                                 10
                             </div>
-                        </div>
+                        </div> -->
 
                     </div>
 
                     <!--- Assigned Orders -->
                     <div class="w-[80%] space-y-2 px-4 py-2 bg-white assigned_orders h-screen">
+                        <?php if(!empty($driverPackage)): ?>
+                        <?php foreach($driverPackage[0]->orders as $order): 
+                            $amount = 0;
+                            $bgColor = '';
+                            $text = '';
+
+                            if($order->order_status == STARTING) {
+                                $bgColor = 'bg-blue-400/50';
+                                $text = 'Started';
+                            }    
+
+                            if($order->order_status ==  PICKED_UP) {
+                                $bgColor = 'bg-blue-400/50';
+                                $text = "Picked Up";
+                            }
+
+                            if($order->order_status == ONWAY) {
+                                $bgColor = 'bg-[#5856CE]/30';
+                                $text = 'On the way';
+                            }
+
+                            // check amount
+                            $items = json_decode($order->packageItems);
+                            foreach($items as $item) {
+                                $amount = $amount + $item->Price;
+                            }
+                        ?>
                         <div class="border border-gray-300/50  rounded-md">
                             <div class="flex flex-row justify-between items-start p-4">
                                 <div class="space-x-4">
                                     <span
-                                        class="bg-primary-100 px-3 py-1 rounded-full bg-blue-400/50 text-xs text-blue-600/75 font-light">Started</span>
+                                        class="bg-primary-100 px-3 py-1 rounded-full <?=$bgColor?> text-xs text-blue-600/75 font-light"><?=$text?></span>
                                     <span class="underline text-xs font-light cursor-pointer" data-te-dropdown-item-ref
                                         data-te-toggle="modal" data-te-target="#order" data-te-ripple-init
                                         data-te-ripple-color="light">Order 1</span>
                                 </div>
                                 <div class="space-x-4">
                                     <span class="text-xs font-semibold"><img src="<?= IMAGES ?>naira.png"
-                                            class="w-3 h-3 -mt-1 inline-block" alt="">50</span>
+                                            class="w-3 h-3 -mt-1 inline-block" alt=""><?=number_format($amount)?></span>
                                     <button type="button" data-te-toggle="modal" data-te-target="#assignDriver"
                                         data-te-ripple-init data-te-ripple-color="light"
                                         class="reassign_driver px-3 py-2 rounded-md bg-gray-200 text-xs font-light tracking-wide">Reassign</button>
@@ -164,121 +195,19 @@
 
                                         <div class="p-[2px]"><img src="<?= IMAGES ?>location.png"
                                                 class="inline-block w-3 h-4" alt="">
-                                            <p class="inline-block text-xs font-bold px-[5px]">Chioma Desire</p>
+                                            <p class="inline-block text-xs font-bold px-[5px]"><?=$order->receiverName?></p>
                                         </div>
                                         <div class="pb-5 px-4 ml-2">
-                                            <p class="text-xs font-light font-sans text-gray-600/70">Behind
-                                                redeemed church rumuokro port harcourt.</p>
+                                            <p class="text-xs font-light font-sans text-gray-600/70"><?=$order->receiverAddress?></p>
                                         </div>
-                                    </div>
-                                    <div>
-                                        <div></div>
-                                        <div></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <?php endforeach; ?>
+                        <?php endif; ?>
 
-                        <div class="border border-gray-300/50  rounded-md">
-                            <div class="flex flex-row justify-between items-start p-4">
-                                <div class="space-x-4">
-                                    <span
-                                        class="bg-primary-100 px-3 py-1 rounded-full bg-blue-400/50 text-xs text-blue-600/75 font-light">Picked
-                                        up</span>
-                                    <span class="underline text-xs font-light cursor-pointer" data-te-dropdown-item-ref
-                                        data-te-toggle="modal" data-te-target="#order" data-te-ripple-init
-                                        data-te-ripple-color="light">Order 2</span>
-                                </div>
-                                <div class="space-x-4">
-                                    <span class="text-xs font-semibold"><img src="<?= IMAGES ?>naira.png"
-                                            class="w-3 h-3 -mt-1 inline-block" alt="">50</span>
-                                    <button type="button" data-te-toggle="modal" data-te-target="#assignDriver"
-                                        data-te-ripple-init data-te-ripple-color="light"
-                                        class="reassign_driver px-3 py-2 rounded-md bg-gray-200 text-xs font-light tracking-wide">Reassign
-                                    </button>
-
-                                </div>
-                            </div>
-                            <hr class="w-full border border-gray-300/50">
-                            <div class="flex justify-start flex-row items-start">
-                                <!-- start poiint and end --->
-                                <div class="px-4">
-                                    <div class="flex flex-col justify-start items-start text-left">
-                                        <div class="p-[2px]"><img src="<?= IMAGES ?>satrt_point.png"
-                                                class="inline-block w-3 h-3" alt="">
-                                            <p class="inline-block text-xs font-bold px-[5px]">Victor Maamaa</p>
-                                        </div>
-                                        <div class="pb-5 px-4 ml-2 border-l border-gray-400/50">
-                                            <p class="text-xs font-light font-sans text-gray-600/70">No 30 oro
-                                                aka street rumuagholu</p>
-                                        </div>
-
-                                        <div class="p-[2px]"><img src="<?= IMAGES ?>location.png"
-                                                class="inline-block w-3 h-4" alt="">
-                                            <p class="inline-block text-xs font-bold px-[5px]">Chioma Desire</p>
-                                        </div>
-                                        <div class="pb-5 px-4 ml-2">
-                                            <p class="text-xs font-light font-sans text-gray-600/70">Behind
-                                                redeemed church rumuokro port harcourt.</p>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div></div>
-                                        <div></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="border border-gray-300/50  rounded-md">
-                            <div class="flex flex-row justify-between items-start p-4">
-                                <div class="space-x-4">
-                                    <span
-                                        class="bg-primary-100 px-3 py-1 rounded-full bg-[#5856CE]/30 text-xs text-[#5856CE] font-light">On
-                                        the way</span>
-                                    <span class="underline text-xs font-light cursor-pointer" data-te-dropdown-item-ref
-                                        data-te-toggle="modal" data-te-target="#order" data-te-ripple-init
-                                        data-te-ripple-color="light">Order 3</span>
-                                </div>
-                                <div class="space-x-4">
-                                    <span class="text-xs font-semibold"><img src="<?= IMAGES ?>naira.png"
-                                            class="w-3 h-3 -mt-1 inline-block" alt="">50</span>
-                                    <button type="button" data-te-toggle="modal" data-te-target="#assignDriver"
-                                        data-te-ripple-init data-te-ripple-color="light"
-                                        class="reassign_driver px-3 py-2 rounded-md bg-gray-200 text-xs font-light tracking-wide">Reassign</button>
-
-                                </div>
-                            </div>
-                            <hr class="w-full border border-gray-300/50">
-                            <div class="flex justify-start flex-row items-start">
-                                <!-- start poiint and end --->
-                                <div class="px-4">
-                                    <div class="flex flex-col justify-start items-start text-left">
-                                        <div class="p-[2px]"><img src="<?= IMAGES ?>satrt_point.png"
-                                                class="inline-block w-3 h-3" alt="">
-                                            <p class="inline-block text-xs font-bold px-[5px]">Victor Maamaa</p>
-                                        </div>
-                                        <div class="pb-5 px-4 ml-2 border-l border-gray-400/50">
-                                            <p class="text-xs font-light font-sans text-gray-600/70">No 30 oro
-                                                aka street rumuagholu</p>
-                                        </div>
-
-                                        <div class="p-[2px]"><img src="<?= IMAGES ?>location.png"
-                                                class="inline-block w-3 h-4" alt="">
-                                            <p class="inline-block text-xs font-bold px-[5px]">Chioma Desire</p>
-                                        </div>
-                                        <div class="pb-5 px-4 ml-2">
-                                            <p class="text-xs font-light font-sans text-gray-600/70">Behind
-                                                redeemed church rumuokro port harcourt.</p>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div></div>
-                                        <div></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
 

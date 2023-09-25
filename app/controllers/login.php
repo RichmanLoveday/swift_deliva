@@ -52,7 +52,13 @@ class Login extends Controller
                     // authenticate user and store current login user in session
                     $USER = $row;
 
-                    Auth::authenticate($USER);
+                    // check if drivr status is not disabled
+                    if($USER->status == DRIVE_DISABLED) {
+                        $this->redirect('login');
+                    } else {
+                        Auth::authenticate($USER);
+                    }
+
                 }
 
                 if ($row->role == SUPER_ADMIN) {

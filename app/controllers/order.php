@@ -65,7 +65,7 @@ class Order extends Controller
         $currOrders = $this->current_orders($user->companyID);
         
         $data['currentOrders'] = $currOrders;
-        $data['drivers'] = $this->driverM->get_all_drivers_by_company_id($user->companyID);
+        $data['drivers'] = $this->driverM->get_all_drivers_by_company_id($user->companyID, ONDUTY);
         $data['companyID'] = $user->companyID;
         $data['role'] = $user->role;
        // show($currOrders); die;

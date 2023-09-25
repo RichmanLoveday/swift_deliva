@@ -35,6 +35,15 @@ class Dispatch extends Controller
         if (!Auth::access('driver')) $this->redirect('dashboard');
         $user = Auth::logged_in();
 
+        // get user
+        $USER = $this->usersM->get_user($user->userID);
+
+        // check if drivr status is not disabled
+        $USER = $this->usersM->get_user($user->userID);
+        if($USER->status == DRIVE_DISABLED) {
+            $this->redirect('logout');
+        }
+
         // if ajax request is empty
         if (!isObjectEmpty($this->fetch)) {
            // show($this->fetch); 
