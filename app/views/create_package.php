@@ -114,7 +114,8 @@
                                                 </li>
                                                 <?php endif; ?>
                                                 <li>
-                                                    <a target="_blank" href="<?= ROOT ?>packages/track_package"
+                                                    <a target="_blank"
+                                                        href="<?= ROOT ?>packages/track_package/<?=$package->trackingID?>"
                                                         class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400"><img
                                                             src="<?= IMAGES ?>track.png" class="inline-block h-5 w-5"
                                                             alt="">Track package

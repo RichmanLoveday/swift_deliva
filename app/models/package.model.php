@@ -114,6 +114,13 @@ class Package extends Models
         return false;
     }
 
+    public function getTrackerById($trackingID) {
+        $query = "SELECT * FROM tracking WHERE tracking_id = :id order by id asc";
+        $result = $this->Database->read($query, ['id' => $trackingID]);
+
+        return is_array($result) ? $result : false;
+    }
+
     public function edit_package($data, $packageID) {
         //  show($data); die;
         $package['packageDescription'] = $data->packageDecription;
@@ -197,6 +204,13 @@ class Package extends Models
         return is_array($result) ? $result[0] : false;
     }
 
+    public function getPackageByTracker($trackingID)
+    {
+        $query = "SELECT * FROM packages WHERE trackingID = :id limit 1";
+        $result = $this->Database->read($query, ['id' => $trackingID]);
+        return is_array($result) ? $result[0] : false;
+    }
+
     public function get_package_orders($packageID) {
         $query = "SELECT * FROM packages JOIN orders ON packages.packageID = orders.packageID JOIN receiver as rec ON packages.receiverID = rec.receiverID JOIN users ON packages.senderID = users.userID WHERE packages.packageID = :packageID limit 1";
 
@@ -218,6 +232,8 @@ class Package extends Models
         $result  =  $this->Database->read($query, ['id'=>$id]);
 
         return is_array($result) ? $result[0] : false;
-    }    
+    } 
+    
+
 
 }

@@ -5,52 +5,78 @@
     <!---- Dashboard COnatiner-->
     <div class="mx-auto rounded-md mb-10">
         <div id="status" class="flex justify-start flex-row items-center space-x-3">
-            <h1 class="text-left font-sans text-sm text-black/60 leading-10 font-bold">Hey Richman,
+            <h1 class="text-left font-sans text-sm text-black/60 leading-10 font-bold">Hey <?=$userName?>,
                 Welcome back
                 <img src="<?= IMAGES ?>wave_hand.png" class="inline-block -mt-2 p-2" alt="">
             </h1>
-            <span
-                class="cursor-pointer online px-5 py-1 rounded-full bg-[#66BD50] text-white font-sans font-semibold opacity-0  transition ease-linear hidden">Go
+            <?php if($role == DRIVER): ?>
+            <?php 
+            $offlne = '';
+            $online = '';
+            if($status == ONDUTY) {
+                $online = 'hidden opacity-0';
+                $offlne = 'opacity-100';
+            } else {
+                $online = 'opacity-100';
+                $offlne = 'hidden opacity-0';
+            }
+            ?>
+            <span onclick="update_status(this, '<?=ROOT?>dashboard/change_status', '<?=$userID?>')"
+                class="cursor-pointer online px-5 py-1 rounded-full bg-[#66BD50] text-white font-sans font-semibold  transition ease-linear <?=$online?>">Go
                 online
             </span>
 
-            <span
-                class="cursor-pointer offline px-5 py-1 rounded-full bg-red-800 text-white font-sans font-semibold opacity-100  transition ease-linear">Go
+            <span onclick="update_status(this, '<?=ROOT?>dashboard/change_status', '<?=$userID?>')"
+                class="cursor-pointer offline px-5 py-1 rounded-full bg-red-800 text-white font-sans font-semibold  transition ease-linear <?=$offlne?>">Go
                 offline
             </span>
+            <?php endif; ?>
         </div>
-        <div class="w-[85%] mx-auto flex flex-wrap flex-col md:flex-row justify-start items-center my-5">
+        <div class="w-[85%] mx-auto flex flex-wrap flex-col md:flex-row justify-center items-center my-5">
             <!--- Total-->
+            <?php if($role == SUPER_ADMIN): ?>
             <div
                 class="border-l-4 rounded-md shadow-md bg-white border-yellowColor  space-y-5 px-4 py-4 text-left w-[20%] mx-4 my-2">
                 <p class="font-sans font-semibold leading-tight text-xs text-black/50">Total No of companies</p>
                 <span class="text-left text-xl font-semibold font-sans text-black/60">10</span>
             </div>
+            <?php endif; ?>
+
+            <?php if($role == SUPER_ADMIN || $role == ADMIN || $role == CUSTOMER): ?>
             <div
                 class="border-l-4 rounded-md shadow-md bg-white border-yellow-950/70 space-y-5 px-4 py-4 text-left w-[20%] mx-4 my-2">
                 <p class="font-sans font-semibold leading-tight text-xs text-black/50">Total Order</p>
                 <span class="text-left text-xl font-semibold font-sans text-black/60">110 Orders</span>
             </div>
+            <?php endif;?>
 
+            <?php if($role == SUPER_ADMIN || $role == ADMIN || $role == DRIVER): ?>
             <div
                 class="border-l-4 rounded-md shadow-md bg-white border-[#1D409C]  space-y-5 px-4 py-4 text-left w-[20%] mx-4 my-2">
                 <p class="font-sans font-semibold leading-tight text-xs text-black/50">Total
                     deliveries</p>
                 <span class="text-left text-xl font-semibold font-sans text-black/60">20 deliveries</span>
             </div>
+            <?php endif; ?>
 
+
+            <?php if($role == SUPER_ADMIN || $role == ADMIN): ?>
             <div
                 class="border-l-4 rounded-md shadow-md bg-white border-[#2ECC75]  space-y-5 px-4 py-4 text-left w-[20%] mx-4 my-2">
                 <p class="font-sans font-semibold leading-tight text-xs text-black/50">Total drivers</p>
                 <span class="text-left text-xl font-semibold font-sans text-black/60">30 drivers</span>
             </div>
+            <?php endif; ?>
 
+
+            <?php if($role == SUPER_ADMIN || $role == ADMIN): ?>
             <div
                 class="border-l-4 rounded-md shadow-md bg-white border-[#EF934D] space-y-2 px-4 py-4 text-left w-[20%] mx-4 my-2">
                 <p class="font-sans font-semibold leading-tight text-xs text-black/50">Earning</p>
                 <span class="text-left text-xl font-semibold font-sans text-black/60 flex"><img
                         src="<?= IMAGES ?>naira.png" class="w-4 h-4 mt-[6px]" alt=""> 10</span>
             </div>
+            <?php endif; ?>
         </div>
         <div class="hidden md:flex justify-around items-center text-sm text-gray-700 font-sans font-semibold -mb-2">
             <h2>Assigned orders by driver</h2>

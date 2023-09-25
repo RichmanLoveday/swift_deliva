@@ -22,6 +22,7 @@
                 </span>
             </a>
         </li>
+        <?php if($role == ADMIN || $role == CUSTOMER): ?>
         <li class="relative">
             <a href="<?= ROOT ?>packages"
                 class="flex group h-12 cursor-pointer items-center truncate rounded-[5px] px-6 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-slate-50 hover:text-inherit hover:outline-none focus:bg-yel focus:text-inherit focus:outline-none active:bg-yellowColor active:text-white active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
@@ -41,6 +42,8 @@
                 </span>
             </a>
         </li>
+        <?php endif; ?>
+        <?php if($role == DRIVER): ?>
         <li class="relative">
             <a href="<?= ROOT ?>dispatch"
                 class="flex group h-12 cursor-pointer items-center truncate rounded-[5px] px-6 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-slate-50 hover:text-inherit hover:outline-none focus:bg-yellowColor focus:text-inherit focus:outline-none active:bg-yellowColor active:text-white active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
@@ -60,6 +63,9 @@
                 </span>
             </a>
         </li>
+        <?php endif; ?>
+
+        <?php if($role == ADMIN || $role == SUPER_ADMIN): ?>
         <li class="relative">
             <a href="<?= ROOT ?>order"
                 class="flex group h-12 cursor-pointer items-center truncate rounded-[5px] px-6 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-slate-50 hover:text-inherit hover:outline-none focus:bg-yel focus:text-inherit focus:outline-none active:bg-yellowColor active:text-white active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
@@ -136,6 +142,7 @@
                 </span>
             </a>
         </li>
+        <?php endif; ?>
     </ul>
 </section>
 <!-- Sidenav -->

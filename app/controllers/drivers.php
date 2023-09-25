@@ -32,7 +32,7 @@ class Drivers extends Controller
         // get all drivers in specific company
         $data['companyID'] = $user->companyID;
         $data['drivers'] = $this->driverM->get_all_drivers_by_company_id($user->companyID);
-
+        $data['role'] = $user->role;
         // show($data);
         // die;
 

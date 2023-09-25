@@ -641,12 +641,13 @@ async function accept_package(e) {
     const userID = e.dataset.userid;
     const packageID = e.dataset.packageid;
 
+    console.log(url);
+
     const res = await axios.post(url, {
         driverID: userID,
         orderID: orderID,
         packageID: packageID
     }, { "Content-Type": "application/json" })
-
 
     if (res.data.status == "success") {
         display_msg(res.data.message);

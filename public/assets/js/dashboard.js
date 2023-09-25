@@ -5,29 +5,42 @@ const reassignDriver = document.querySelector('.reassign_driver');
 const drivers = document.querySelectorAll('.driver');
 
 // change status
-function update_status(e) {
-    if (e.target.classList.contains('offline')) {
-        e.target.classList.remove('opacity-100', 'hidden');
-        e.target.classList.add('opacity-0');
+async function update_status(e, url, userID) {
+    if (e.classList.contains('offline')) {
+        const res = await axios.post(url, { userID: userID, status: 'offline' });
+        console.log(res.data);
 
-        setTimeout(() => {
-            e.target.classList.add('hidden');
-            e.target.previousElementSibling.classList.remove('hidden', 'opacity-0');
-        }, 500)
+        if (res.data.status == 'success') {
+            e.classList.remove('opacity-100', 'hidden');
+            e.classList.add('opacity-0');
+
+            setTimeout(() => {
+                e.classList.add('hidden');
+                e.previousElementSibling.classList.remove('hidden', 'opacity-0');
+            }, 500)
+        }
+
     }
 
-    if (e.target.classList.contains('online')) {
-        e.target.classList.remove('opacity-100', 'hidden');
-        e.target.classList.add('opacity-0');
+    if (e.classList.contains('online')) {
+        // send ajax
+        const res = await axios.post(url, { userID: userID, status: 'online' });
+        console.log(res.data)
 
-        setTimeout(() => {
-            e.target.classList.add('hidden');
-            e.target.nextElementSibling.classList.remove('hidden');
-            e.target.nextElementSibling.classList.add('opacity-100');
-        }, 500)
+        if (res.data.status == 'success') {
+            e.classList.remove('opacity-100', 'hidden');
+            e.classList.add('opacity-0');
+
+            setTimeout(() => {
+                e.classList.add('hidden');
+                e.nextElementSibling.classList.remove('hidden');
+                e.nextElementSibling.classList.add('opacity-100');
+            }, 500)
+        }
+
     }
 }
-Status.addEventListener('click', update_status);
+//Status.addEventListener('click', update_status);
 
 
 function update_available_orders(e) {

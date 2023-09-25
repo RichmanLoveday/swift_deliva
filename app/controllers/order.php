@@ -56,7 +56,7 @@ class Order extends Controller
             $data['uri'] = ROOT;
             $data['orders'] = $currOrders;
             $data['type'] = 'currentOrder';
-
+        
             echo json_encode($data);
             return;
         }
@@ -67,6 +67,7 @@ class Order extends Controller
         $data['currentOrders'] = $currOrders;
         $data['drivers'] = $this->driverM->get_all_drivers_by_company_id($user->companyID);
         $data['companyID'] = $user->companyID;
+        $data['role'] = $user->role;
        // show($currOrders); die;
 
       // show($data); die;
@@ -308,6 +309,11 @@ class Order extends Controller
                 // for current day orders
                 if($this->fetch->tab == 'currentDay') {
                     if ($currentDate === $pcikUpdate && $currentDate > $deliveryDate) {
+                        // store tracking reshedule
+                        // update tracker
+                        $package = $this->packagesM->get_package_id($order->packageID);
+                        $this->packagesM->update_tracking($package->trackingID, $this->fetch->packageID, RESHEDULE);
+
                         $data['remove'] = false;
                         
                     } else {
@@ -321,8 +327,14 @@ class Order extends Controller
                 // for incomplete orders
                 if ($this->fetch->tab === 'incompleteOrders') {
                     if ($currentDate > $pcikUpdate) {
+                        // store tracking reshedule
+                        // update tracker
+                        $package = $this->packagesM->get_package_id($order->packageID);
+                        $this->packagesM->update_tracking($package->trackingID, $this->fetch->packageID, RESHEDULE);
+
                         $data['remove'] = true;
                     } else {
+            
                         $data['remove'] = false;
                         $data['pickupdate'] = $date[0];
                         $data['deliverydate'] = $date[1];
@@ -332,8 +344,14 @@ class Order extends Controller
                 // for history past
                 if($this->fetch->tab === 'orderHistory') {
                     if($currentDate > $deliveryDate) {
+                        // store tracking reshedule
+                        // update tracker
+                        $package = $this->packagesM->get_package_id($order->packageID);
+                        $this->packagesM->update_tracking($package->trackingID, $this->fetch->packageID, RESHEDULE);
+                        
                         $data['remove'] = true;
                     } else {
+                        
                         $data['remove'] = false;
                         $data['pickupdate'] = $date[0];
                         $data['deliverydate'] = $date[1];
@@ -411,6 +429,11 @@ class Order extends Controller
                 // set status
                 $this->statusChecker($order);
 
+                // store tracking reassign driver
+                // update tracker
+                $package = $this->packagesM->get_package_id($order->packageID);
+                $this->packagesM->update_tracking($package->trackingID, $this->fetch->packageID, REASSIGN);
+
                 $data['order'] = $order;
                 $data['status'] = 'success';
                 $data['message'] = 'Driver reassigned successfully';
@@ -439,6 +462,11 @@ class Order extends Controller
                 $order = $this->orderM->get_orders_by_id($this->fetch->orderID);
                 // $updatePackage = $this->packagesM->cancel_package($order->packageID, );
                 $this->statusChecker($order);
+
+                // store tracking delivered
+                // update tracker
+                $package = $this->packagesM->get_package_id($order->packageID);
+                $this->packagesM->update_tracking($package->trackingID, $this->fetch->packageID, ITEMDELIVERED);
                 
                 $data['order'] = $order;
                 $data['status'] = 'success';

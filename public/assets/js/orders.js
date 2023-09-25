@@ -554,6 +554,7 @@ async function view_details(e) {
             const resData = await axios.post(url, { orderID: e.target.dataset.orderid, packageID: e.target.dataset.packageid });
 
             console.log(resData.data)
+
             if (resData.data.status == 'success') {
                 row.remove();
                 //  document.querySelector('.orderStatus').textContent = resData.data.order.orderStatus;

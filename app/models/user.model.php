@@ -139,7 +139,7 @@ class User extends Models
         // connection
         $db = Database::newInstance();
         
-        $sql = "SELECT * FROM users WHERE userID = :id";
+        $sql = "SELECT * FROM users WHERE userID = :id limit 1";
         $row = $db->read($sql, ['id' => $id]);   
 
         return is_array($row) ? $row[0] : false;
@@ -179,5 +179,15 @@ class User extends Models
             }
         }
         return false;
+    }
+
+    public function update_status($userID, $status) {
+        // connection
+        $db = Database::newInstance();
+
+        $query = "UPDATE users SET status = :status WHERE userID = :userID";
+        $result = $db->write($query, ['status' => $status, 'userID' => $userID]);
+
+        return $result ? true : false;
     }
 }

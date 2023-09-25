@@ -73,7 +73,7 @@ class Dispatch extends Controller
         $data['companyID'] = $user->companyID;
         $data['userID'] = $user->userID;
         $data['orders'] = $currOrders;
-
+        $data['role'] = $user->role;
         // show($data);
         // die;
 
@@ -135,13 +135,14 @@ class Dispatch extends Controller
     }
 
     public function accept_order() {
+      //  show($this->fetch); die;
         $updateTrackingID = $this->packageM->package_tracker_update($this->fetch->packageID, APPROVED_PACKAGE);     // update package tracking id
-        $read_tracker = $this->packageM->read_tracker($this->fetch->packageID, START); // check if tracking already has value, if not add to it
+        $read_tracker = $this->packageM->read_tracker($this->fetch->packageID, APPROVED); // check if tracking already has value, if not add to it
         $update_order = $this->driverM->update_order($this->fetch->driverID, $this->fetch->orderID, STARTING);           // update package status
         
         // echo $read_tracker;
         if (!$read_tracker) {
-            $tracker = $this->packageM->update_tracking($updateTrackingID->trackingID, $this->fetch->packageID, START);
+            $tracker = $this->packageM->update_tracking($updateTrackingID->trackingID, $this->fetch->packageID, APPROVED);
         }
 
 
@@ -278,6 +279,7 @@ class Dispatch extends Controller
 
                 if ($this->fetch->type == 'done') {
                 
+                  //  show($this->fetch); die;
                     // update orders status
                     $update_order = $this->driverM->update_order($this->fetch->userID, $this->fetch->orderID, ORDER_DELIVERED);
                     $trackingID = $this->packageM->get_package_by_id($this->fetch->packageID);
@@ -285,7 +287,7 @@ class Dispatch extends Controller
                     $read_tracker = $this->packageM->read_tracker($this->fetch->packageID, ITEMDELIVERED);
 
                     // store payment by driver
-                    if($this->fetch->payment) {
+                    if(isset($this->fetch->payment) && $this->fetch->payment) {
                         $this->fetch->paymentMethod = 'Cash on delivery';
                         $this->store_payment($this->fetch);
                     }

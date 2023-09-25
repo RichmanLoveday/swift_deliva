@@ -17,8 +17,12 @@ class Company extends Models
     {
     }
 
-    public function get_comapny_by_id()
+    public function getPackageCompany($trackingID)
     {
+        $query = "SELECT * FROM company JOIN orders ON orders.companyID = company.companyID JOIN packages ON packages.packageID = orders.packageID WHERE packages.trackingID = :trackingID limit 1";
+        $result = $this->Database->read($query, ['trackingID' => $trackingID]);
+        
+        return is_array($result) ? $result[0] : false;
     }
 
     public function get_company_by_owner($owner)
