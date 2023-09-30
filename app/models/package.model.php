@@ -23,6 +23,16 @@ class Package extends Models
 
     }
 
+    public function get_all_package_order_by_userID($userID)
+    {
+        $query = "SELECT * FROM packages JOIN orders ON packages.packageID = orders.packageID JOIN receiver as rec ON packages.receiverID = rec.receiverID JOIN users ON users.userID = packages.senderID WHERE packages.senderID = :userID order by packages.senderID desc";
+
+        $result = $this->Database->read($query, ['userID'=> $userID]);
+
+        return is_array($result) ? $result : false;
+
+    }
+    
     public function get_all_package_order() {
         $query = "SELECT * FROM packages JOIN orders ON packages.packageID = orders.packageID JOIN receiver as rec ON packages.receiverID = rec.receiverID WHERE packages.deliveryStatus != :status order by packages.senderID desc";
 

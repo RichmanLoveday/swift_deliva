@@ -21,6 +21,9 @@ class Login extends Controller
         $data = [];
         $data['page_title'] = 'Login';
 
+        // check if logedin
+        if(Auth::logged_in()) $this->redirect('dashboard');
+
         if ($_SERVER['REQUEST_METHOD'] === "POST") {
             $row = $this->userM->login($_POST);        // Get the row data when login
 
@@ -40,7 +43,6 @@ class Login extends Controller
                     $row->companyID = $company[0]->companyID;
 
                     // authenticate user and store current login user in session
-                    $USER = $row;
                     Auth::authenticate($USER);
                 }
 

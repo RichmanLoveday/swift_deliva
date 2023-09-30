@@ -452,7 +452,6 @@ async function view_details(e) {
     const orderNum = e.target.dataset.ordernum;
     const row = e.target.closest('.order_row');
     let spinner = document.querySelector('.loader');
-    console.log('Yeeeeeeeeeeeeeeeeee');
     let test = document.querySelector('.orderStatus')
 
     try {

@@ -318,7 +318,7 @@ class Driver extends Models
 
 
     public function get_current_orders($driverID, $companyID) {
-        $query = "SELECT * FROM orders as o JOIN packages p ON p.packageID = o.packageID JOIN receiver as r ON r.receiverID = p.receiverID JOIN users as u ON u.userID = p.senderID WHERE o.driverID = :driverID AND o.companyID = :companyID AND o.order_status = :started OR o.order_status = :pickup OR o.order_status = :onway";
+        $query = "SELECT * FROM orders as o JOIN packages p ON p.packageID = o.packageID JOIN receiver as r ON r.receiverID = p.receiverID JOIN users as u ON u.userID = p.senderID WHERE o.driverID = :driverID AND o.companyID = :companyID AND (o.order_status = :started OR o.order_status = :pickup OR o.order_status = :onway)";
 
         $result = $this->DB->read($query, ['driverID' => $driverID, 'companyID' => $companyID, 'started' => STARTING, 'pickup' => PICKED_UP, 'onway' => ONWAY]);
 
@@ -326,9 +326,9 @@ class Driver extends Models
     }
 
     public function getDriveActiveOrd($driverID) {
-        $query = "SELECT * FROM orders as o JOIN users as u ON u.userID = o.driverID WHERE o.driverID = :driverID AND (o.order_status = :started OR o.order_status = :pickup OR o.order_status = :waiting OR o.order_status = :onway)";
+        $query = "SELECT * FROM orders as o JOIN users as u ON u.userID = o.driverID WHERE o.driverID = :driverID AND (o.order_status = :started OR o.order_status = :pickup OR o.order_status = :onway)";
 
-        $result = $this->DB->read($query, ['driverID' => $driverID, 'started' => STARTING, 'pickup' => PICKED_UP, 'onway' => ONWAY, 'waiting' => WAITING]);
+        $result = $this->DB->read($query, ['driverID' => $driverID, 'started' => STARTING, 'pickup' => PICKED_UP, 'onway' => ONWAY]);
 
         return is_array($result) ? $result : [];
     }
