@@ -3,15 +3,8 @@
 <!-- Section body -->
 <section class="py-5 bg-gray-500/5 overflow-y-scroll h-screen fixed top-16 w-full !pl-[260px] text-center" id="content">
     <div class="flex justify-between items-center mx-auto md:flex-row border-b-2 border-b-gray-600/30 px-10">
-        <h3 class="font-sans font-semibold leading-8 text-2xl">Create Pascel</h3>
+        <h3 class="font-sans font-semibold leading-8 text-2xl"><?=$page_title?></h3>
         <div class="flex justify-around items-center space-x-4 p-4">
-            <div class="flex justify-center items-center">
-                <img class="border h-8 border-gray-500/50 py-[8px] pl-[8px] rounded-l-md border-r-0"
-                    src="<?= IMAGES ?>search.png" alt="">
-                <input
-                    class="h-8 focus:outline-none  focus:border-gray-500/50 focus:ring-0 border-0 border-y border-r border-r-gray-500/50 border-y-gray-500/50 rounded-r-md bg-gray-500/0"
-                    id="search" type="text" placeholder="Search pascel">
-            </div>
             <a onclick="changeBtn()" href=" #" data-te-toggle="modal" data-te-target="#createPackage"
                 data-te-ripple-init data-te-ripple-color="light"
                 class="border border-yellowColor px-3 py-1 text-center w-full rounded-lg bg-yellowColor text-white transition duration-150 hover:ease-in "><img

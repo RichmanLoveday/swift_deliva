@@ -39,6 +39,7 @@ class Login extends Controller
 
                 if ($row->role == ADMIN) {
                     // add company role to user role
+                    $USER = $row;
                     $company = $this->companyM->get_company_by_owner($row->userID);
                     $row->companyID = $company[0]->companyID;
 
@@ -62,7 +63,7 @@ class Login extends Controller
                     }
 
                 }
-
+                
                 if ($row->role == SUPER_ADMIN) {
                     die;
                 }

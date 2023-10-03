@@ -39,4 +39,19 @@ class Payment extends Models {
 
         return is_array($result) ? $result : false;
     }
+
+    public function getUserPayments($companyID = null) {
+        if($companyID != NULL) {
+            $query = "SELECT * FROM orders JOIN payment ON orders.orderID = payment.orderID JOIN packages ON orders.packageID = packages.packageID JOIN users ON packages.senderID = users.userID WHERE orders.companyID = :companyID order by orders.id DESC";
+            $result = $this->Database->read($query, ['companyID' => $companyID]);
+
+            return is_array($result) ? $result : false;
+            
+        } else {
+            $query = "SELECT * FROM orders JOIN payment ON orders.orderID = payment.orderID JOIN packages ON orders.packageID = packages.packageID JOIN users ON packages.senderID = users.userID order by orders.id DESC";
+            $result = $this->Database->read($query);
+
+            return is_array($result) ? $result : false;
+        }
+    }
 }

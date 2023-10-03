@@ -105,7 +105,7 @@
             </a>
         </li>
         <li class="relative">
-            <a href="<?= ROOT ?>orders/payments"
+            <a href="<?= ROOT ?>payments"
                 class="flex group h-12 cursor-pointer items-center truncate rounded-[5px] px-6 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear  hover:bg-yellow-500 hover:text-white hover:text-inherit hover:outline-none focus:bg-yel focus:text-inherit focus:outline-none active:bg-yellowColor active:text-white active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
                 data-te-sidenav-link-ref>
                 <span class="mr-4 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400">

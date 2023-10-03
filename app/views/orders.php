@@ -3,18 +3,7 @@
 <!-- Sidenav -->
 <section class="py-5 bg-gray-500/5 overflow-y-scroll h-screen fixed top-16 w-full !pl-[260px] text-center" id="content">
     <div class="flex justify-between items-center mx-auto md:flex-row border-b-2 border-b-gray-600/30 px-10">
-        <h3 class="font-sans font-semibold leading-8 text-2xl">Orders</h3>
-        <div class="flex justify-around items-center space-x-6 p-4">
-            <div class="flex justify-center items-center">
-                <img class="border h-8 border-gray-500/50 py-[8px] pl-[8px] rounded-l-md border-r-0"
-                    src="<?= IMAGES ?>search.png" alt="">
-                <input
-                    class="h-8 focus:outline-none  focus:border-gray-500/50 focus:ring-0 border-0 border-y border-r border-r-gray-500/50 border-y-gray-500/50 rounded-r-md bg-gray-500/0"
-                    id="search" type="text" placeholder="Search order">
-            </div>
-            <a href="#"
-                class="border border-yellowColor px-8 py-1 text-center w-full rounded-md bg-yellowColor text-white transition duration-150 hover:ease-in">Search</a>
-        </div>
+        <h3 class="font-sans font-semibold leading-8 text-2xl mb-5"><?=$page_title?></h3>
     </div>
 
     <div class="w-full mx-auto px-5 mt-8 border-b-2 border-b-gray-600/30 ">
