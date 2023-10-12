@@ -18,7 +18,9 @@ class Home extends Controller
 
     public function index()
     {
-
+        // check if logedin
+        if(Auth::logged_in()) $this->redirect('dashboard');
+        
         $this->view("landing_page", ['page_title' => 'Home Page']);
     }
 
