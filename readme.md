@@ -16,7 +16,7 @@ Welcome to the Parcel Delivery Management System (PDMS) designed specifically fo
 
 - **Backend Technologies**: MySQL, PHP
 - **Frontend Technologies**: JavaScript, HTML, CSS, TailwindCSS
-- **Other Technologies**: OOP, MVC Design Pattern
+- **Other Technologies**: OOP, MVC Architectural Design Pattern
 
 ## How to Contribute
 
